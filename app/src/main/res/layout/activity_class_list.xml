@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.bdero.bulibraryreserves.CourseListActivity">
+
+    <!-- Search bar. Always remains on top -->
+    <EditText
+        android:id="@+id/et_class_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:hint="Course code"
+        android:imeOptions="actionSearch"
+        android:inputType="textCapCharacters"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Instruciton or alert text. In pre-search, gives advice about searching for course codes.
+         In post-search, if there are no results, it explains the situation to the user-->
+    <TextView
+        android:id="@+id/tv_info_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:maxWidth="192dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="No courses under that code could be found. Please try again." />
+
+    <!-- Progress circle. Only appears during search operation -->
+    <ProgressBar
+        android:id="@+id/progbar_class_search"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_class_search"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!-- List of results from the search -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_class_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:visibility="visible"
+        app:layout_constraintHeight_max="360dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_class_search_bar"
+        tools:layout_height="240dp"
+        tools:listitem="@layout/item_class_list" />
+
+    <!--<ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_class_search_bar">
+
+        <TextView
+            android:id="@+id/tv_class_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_class_search_bar"
+            tools:text="Test Text" />
+    </ScrollView>-->
+
+</android.support.constraint.ConstraintLayout>
