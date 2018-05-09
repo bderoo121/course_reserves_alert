@@ -80,7 +80,7 @@ public class FetchCitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,Ar
     protected void onPostExecute(ArrayList<String> strings) {
         super.onPostExecute(strings);
 
-        mCourseHolder.mCitationsListView.setAdapter(new ArrayAdapter<String>(mCourseHolder.mContext, R.layout.item_book_list));
+        mCourseHolder.mCitationsListView.setAdapter(new ArrayAdapter<String>(mCourseHolder.mContext, R.layout.tracked_book_list_item));
 
         mCourseHolder.mCitationsProgBar.setVisibility(View.GONE);
     }

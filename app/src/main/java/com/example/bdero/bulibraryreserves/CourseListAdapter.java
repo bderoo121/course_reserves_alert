@@ -59,7 +59,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     public CourseHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         // Create a new view
-        int classLayout = R.layout.item_class_list;
+        int classLayout = R.layout.course_list_item;
         boolean shouldAttachImmediately = false;
 
         Context context = parent.getContext();

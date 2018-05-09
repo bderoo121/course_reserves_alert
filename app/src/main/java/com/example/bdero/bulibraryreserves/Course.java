@@ -23,8 +23,8 @@ public class Course {
     private boolean mIsActive;
     private boolean mAreCitationsLoaded;
 
-    public Course(JSONObject courseJSON){
-        try{
+    public Course(JSONObject courseJSON) {
+        try {
             this.mCourseCode = courseJSON.getString("code");
             this.mCourseName = courseJSON.getString("name");
             this.mCourseLink = courseJSON.getString("link");
@@ -50,24 +50,38 @@ public class Course {
             this.mIsActive = courseJSON.getString("status").equals("ACTIVE");
             this.mAreCitationsLoaded = courseJSON.optBoolean("citations_loaded");
 
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
 
-    public String getCourseCode() { return mCourseCode; }
+    public String getCourseCode() {
+        return mCourseCode;
+    }
 
-    public String getCourseName() { return mCourseName; }
+    public String getCourseName() {
+        return mCourseName;
+    }
 
-    public String getCourseLink() { return mCourseLink; }
+    public String getCourseLink() {
+        return mCourseLink;
+    }
 
-    public ArrayList<String[]> getInstructors(){return mInstructors; }
+    public ArrayList<String[]> getInstructors() {
+        return mInstructors;
+    }
 
-    public ArrayList<String> getReadingLists(){return mReadingListLinks; }
+    public ArrayList<String> getReadingLists() {
+        return mReadingListLinks;
+    }
 
-    public void addReadingList(String readingListLink){ mReadingListLinks.add(readingListLink);}
+    public void addReadingList(String readingListLink) {
+        mReadingListLinks.add(readingListLink);
+    }
 
-    public void addCitation(JSONObject citation){ mCitations.add(citation); }
+    public void addCitation(JSONObject citation) {
+        mCitations.add(citation);
+    }
 
 }

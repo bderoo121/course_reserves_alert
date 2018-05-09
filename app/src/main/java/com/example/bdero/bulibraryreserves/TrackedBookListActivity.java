@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-public class BookListActivity extends AppCompatActivity {
+public class TrackedBookListActivity extends AppCompatActivity {
 
     private TextView mEmptyView;
     private RecyclerView mRecyclerView;
@@ -32,7 +32,7 @@ public class BookListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_list);
+        setContentView(R.layout.tracked_book_list_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -42,7 +42,7 @@ public class BookListActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new BookListAdapter(tempBookData);
+        mAdapter = new TrackedBookListAdapter(tempBookData);
         mRecyclerView.setAdapter(mAdapter);
 
         //The FAB will bring the user to the class search page.

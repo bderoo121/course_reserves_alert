@@ -64,7 +64,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_class_search_bar"
         tools:layout_height="240dp"
-        tools:listitem="@layout/item_class_list" />
+        tools:listitem="@layout/course_list_item" />
 
     <!--<ScrollView
         android:id="@+id/scrollView2"

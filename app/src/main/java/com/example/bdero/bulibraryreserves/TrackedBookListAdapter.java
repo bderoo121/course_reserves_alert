@@ -10,23 +10,23 @@ import android.widget.TextView;
 /**
  * Created by bdero on 3/12/2018.
  */
-public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookViewHolder> {
+public class TrackedBookListAdapter extends RecyclerView.Adapter<TrackedBookListAdapter.BookViewHolder> {
 
     private String[][] mDataset; //{"Book 1", "Book 2", "Book 3", "Organic Chemistry"};
 
-    public static class BookViewHolder extends RecyclerView.ViewHolder{
+    static class BookViewHolder extends RecyclerView.ViewHolder{
 
-        public final TextView mBookTitle;
-        public final TextView mClassInfo;
+        final TextView mBookTitle;
+        final TextView mClassInfo;
 
-        public BookViewHolder(View view) {
+        BookViewHolder(View view) {
             super(view);
             mBookTitle = (TextView) view.findViewById(R.id.tv_book_title);
             mClassInfo = (TextView) view.findViewById(R.id.tv_class_info);
         }
     }
 
-    public BookListAdapter(String[][] myDataset){
+    TrackedBookListAdapter(String[][] myDataset){
         mDataset = myDataset;
     }
 
@@ -34,7 +34,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
     @Override
     public BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        int bookLayout = R.layout.item_book_list;
+        int bookLayout = R.layout.tracked_book_list_item;
         boolean shouldAttachImmediately = false;
 
         LayoutInflater inflater = LayoutInflater.from(context);
