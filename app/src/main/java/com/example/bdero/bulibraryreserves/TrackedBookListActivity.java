@@ -20,11 +20,11 @@ public class TrackedBookListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
 
 
-    private String[][] tempBookData = {
-            {"Prinicples of Biochemistry", "CH421, Prof. Allen"},
-            {"Comparing Religions", "RE121, Prof. Li"},
-            {"Differential Equations", "MA226, Prof. Blanchard"},
-            {"Organic Chemistry", "CH204, Prof. Schaus"}};
+    private String[][] tempBookData = { //{Book title, class/teacher, isAvailable}
+            {"Prinicples of Biochemistry", "CH421, Prof. Allen", "available"},
+            {"Comparing Religions", "RE121, Prof. Li", "available"},
+            {"Differential Equations", "MA226, Prof. Blanchard", "not available"},
+            {"Organic Chemistry", "CH204, Prof. Schaus", "not available"}};
 
 
 
@@ -33,11 +33,11 @@ public class TrackedBookListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracked_book_list_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mEmptyView = (TextView) findViewById(R.id.empty_view);
-        mRecyclerView = (RecyclerView) findViewById(R.id.book_list_recycler_view);
+        mEmptyView = findViewById(R.id.empty_view);
+        mRecyclerView = findViewById(R.id.book_list_recycler_view);
 
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -46,7 +46,7 @@ public class TrackedBookListActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         //The FAB will bring the user to the class search page.
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

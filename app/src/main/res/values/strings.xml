@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">BU Library Reserves</string>
     <string name="action_settings">Settings</string>
+    <string name="available">Available</string>
+    <string name="on_loan_alert">Currently on loan.\nAlert when available?</string>
+    <string name="add_alert">Add alert</string>
 </resources>
