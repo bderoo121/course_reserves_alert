@@ -6,7 +6,7 @@ This Android app is designed for students at Boston University who use course ma
 
 Making requests into any Alma database requires an [API key](https://developers.exlibrisgroup.com/alma/apis), which can generally only be obtained if you belong to an institution that is an Ex Libris customer.  Ensure your application is set up with access to both the "Bibs" and "Courses" APIs.
 
-![Needed APIs](https://github.com/bderoo121/course_reserves_alert/tree/master/docs/api_management.png)
+![Needed APIs](https://github.com/bderoo121/course_reserves_alert/blob/master/docs/api_management.png)
 
 Unlike in the image, make sure your current plan for the APIS is for the live environment, not a sandbox. You should receive an API key like `l7xx3fc758eddb30fcda874ae3251490e30f` (not a real key).  Create a new `secrets.xml` file in your local repo for this project within the  `res/values` folder:
 
