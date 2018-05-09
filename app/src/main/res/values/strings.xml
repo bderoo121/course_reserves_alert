@@ -4,4 +4,5 @@
     <string name="available">Available</string>
     <string name="on_loan_alert">Currently on loan.\nAlert when available?</string>
     <string name="add_alert">Add alert</string>
+    <string name="alert_added">Alert added!</string>
 </resources>

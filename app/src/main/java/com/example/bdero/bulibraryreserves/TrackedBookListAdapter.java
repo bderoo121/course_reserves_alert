@@ -14,10 +14,11 @@ import android.widget.TextView;
  */
 public class TrackedBookListAdapter extends RecyclerView.Adapter<TrackedBookListAdapter.BookViewHolder> {
 
-    private String[][] mDataset; //{"Book name", "class code/prof.", "availability"};
+    private String[][] mDataset; //Using temp data: {"Book name", "class code/prof.", "availability"};
 
     static class BookViewHolder extends RecyclerView.ViewHolder{
 
+        private boolean isAvailable;
         final TextView mBookTitle;
         final TextView mClassInfo;
         final TextView mAvailabilityNote;
@@ -36,6 +37,8 @@ public class TrackedBookListAdapter extends RecyclerView.Adapter<TrackedBookList
         mDataset = myDataset;
     }
 
+
+
     //Create new views (invoked by layout manager)
     @NonNull
     @Override
@@ -50,7 +53,7 @@ public class TrackedBookListAdapter extends RecyclerView.Adapter<TrackedBookList
 
     //Replace the contents of the view (invoked by layout manager)
     @Override
-    public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final BookViewHolder holder, int position) {
         String bookTitle = mDataset[position][0];
         holder.mBookTitle.setText(bookTitle);
 
@@ -60,13 +63,30 @@ public class TrackedBookListAdapter extends RecyclerView.Adapter<TrackedBookList
         boolean available = mDataset[position][2].equals("available");
         if (available) {
             holder.mAvailabilityImage.setVisibility(View.GONE);
+            holder.mAvailabilityNote.setPadding(0,0,70,0);
             holder.mAvailabilityNote.setText(R.string.available);
+            holder.isAvailable = true;
         } else {
+            holder.mAvailabilityNote.setPadding(0,0,0,0);
             holder.mAvailabilityNote.setText(R.string.on_loan_alert);
             holder.mAvailabilityImage.setImageResource(R.drawable.ic_add_alert_24dp);
             holder.mAvailabilityImage.setVisibility(View.VISIBLE);
+            holder.isAvailable = false;
         }
+
+        holder.mAvailabilityImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!holder.isAvailable){
+                    holder.mAvailabilityImage.setImageResource(R.drawable.ic_check_24dp);
+                    holder.mAvailabilityNote.setText(R.string.alert_added);
+                    holder.mAvailabilityNote.setPadding(50,0,50,0);
+                }
+            }
+        });
     }
+
+
 
     @Override
     public int getItemCount() {
