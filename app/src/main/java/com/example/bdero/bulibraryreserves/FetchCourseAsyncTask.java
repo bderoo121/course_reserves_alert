@@ -3,6 +3,7 @@ package com.example.bdero.bulibraryreserves;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.bdero.bulibraryreserves.data.Course;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 
 import org.json.JSONArray;
@@ -118,7 +119,7 @@ public class FetchCourseAsyncTask extends AsyncTask<URL,Course,Void> {
     protected void onProgressUpdate(Course... courseValues) {
         super.onProgressUpdate(courseValues);
         for (Course courseItem : courseValues) {
-            String code = courseItem.getCourseCode();
+            String code = courseItem.getCode();
 
             // If adapter doesn't have this course, add it to the list.
             if (!mCourseListActivity.mAdapter.getCourseCodes().contains(code)){

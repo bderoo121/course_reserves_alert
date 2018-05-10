@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.example.bdero.bulibraryreserves.CourseListAdapter.CourseHolder;
+import com.example.bdero.bulibraryreserves.data.Course;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 
 import org.json.JSONArray;

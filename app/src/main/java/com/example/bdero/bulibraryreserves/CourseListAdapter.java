@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.bdero.bulibraryreserves.data.Course;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -80,7 +82,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
         // Use the title listed for the first object under the course
         // TODO: Implement a better way to handle multiple/missing course titles.
-        String courseName = holder.mCourse.get(0).getCourseName();
+        String courseName = holder.mCourse.get(0).getName();
         holder.mCourseName.setText(courseName);
 
         // TODO: Implement a better way to handle multiple/missing course instructors.
