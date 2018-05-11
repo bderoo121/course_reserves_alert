@@ -45,8 +45,8 @@ public class NetworkUtils {
     private static final int DEFAULT_LIMIT = 50;
     private static final int DEFAULT_OFFSET = 0;
     private static final String DEFAULT_ORDER_BY = "code,section";
-    public static final String FORMAT_JSON = "json";
     private static final String DIRECTION_ASC = "ASC";
+    public static final String FORMAT_JSON = "json";
 
     @Nullable
     public static URL buildCourseURL(Context context, String queryParameter) {
@@ -63,6 +63,7 @@ public class NetworkUtils {
         try {
             return new URL(courseQueryString);
         } catch (MalformedURLException e) {
+            Log.e(LOG_TAG, "Malformed URL: " + courseQueryString);
             e.printStackTrace();
             return null;
         }

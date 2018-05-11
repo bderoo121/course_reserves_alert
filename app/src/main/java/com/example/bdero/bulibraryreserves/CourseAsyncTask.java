@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.bdero.bulibraryreserves.data.Course;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,7 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
         // TODO: Fix the try catching in this section. Ugh
         try{
             String courseList = NetworkUtils.getResponseFromHttpUrl(urls[0]);
+            Log.d(COURSE_TASK_LOG_TAG, new Gson().fromJson(courseList, com.example.bdero.bulibraryreserves.data.CourseResponse.class).toString());
             JSONObject courseResults = new JSONObject(courseList);
             if (Integer.parseInt(courseResults.getString(TOTAL_RECORD_COUNT)) == 0){
                 Log.d(COURSE_TASK_LOG_TAG,"Valid results, but no records found.");
