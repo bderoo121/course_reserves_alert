@@ -82,11 +82,11 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
         // Use the title listed for the first object under the course
         // TODO: Implement a better way to handle multiple/missing course titles.
-        String courseName = holder.mCourse.get(0).getName();
+        String courseName = holder.mCourse.get(0).getCourseName();
         holder.mCourseName.setText(courseName);
 
         // TODO: Implement a better way to handle multiple/missing course instructors.
-        ArrayList<String[]> courseInstructors = holder.mCourse.get(0).getInstructors();
+        ArrayList<String[]> courseInstructors = holder.mCourse.get(0).getCourseInstructors();
         if (courseInstructors.size() > 0){
 
             // CourseInstructor array object: [prim_identifier, first_name, last_name]
@@ -132,12 +132,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
             super(holder);
 
             mContext = holder.getContext();
-            mClassCode = (TextView) holder.findViewById(R.id.tv_class_code);
-            mCourseName = (TextView) holder.findViewById(R.id.tv_class_name);
-            mClassInstructor = (TextView) holder.findViewById(R.id.tv_class_instructor);
-            mExpandCitationsButton = (ImageButton) holder.findViewById(R.id.ib_expand_citation_list);
-            mCitationsListView = (ListView) holder.findViewById(R.id.lv_citation_list);
-            mCitationsProgBar = (ProgressBar) holder.findViewById(R.id.progbar_citation_search);
+            mClassCode = holder.findViewById(R.id.tv_class_code);
+            mCourseName = holder.findViewById(R.id.tv_class_name);
+            mClassInstructor = holder.findViewById(R.id.tv_class_instructor);
+            mExpandCitationsButton = holder.findViewById(R.id.ib_expand_citation_list);
+            mCitationsListView = holder.findViewById(R.id.lv_citation_list);
+            mCitationsProgBar = holder.findViewById(R.id.progbar_citation_search);
             mCitationsWrapper = holder.findViewById(R.id.fl_citation_wrapper);
             mCourseWrapper = holder.findViewById(R.id.cl_course_wrapper);
 

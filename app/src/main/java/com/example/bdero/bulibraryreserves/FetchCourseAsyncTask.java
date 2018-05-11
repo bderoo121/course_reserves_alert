@@ -119,7 +119,7 @@ public class FetchCourseAsyncTask extends AsyncTask<URL,Course,Void> {
     protected void onProgressUpdate(Course... courseValues) {
         super.onProgressUpdate(courseValues);
         for (Course courseItem : courseValues) {
-            String code = courseItem.getCode();
+            String code = courseItem.getCourseCode();
 
             // If adapter doesn't have this course, add it to the list.
             if (!mCourseListActivity.mAdapter.getCourseCodes().contains(code)){

@@ -16,7 +16,10 @@ import java.util.ArrayList;
 
 @Entity
 public class Course {
-    @PrimaryKey
+
+    public Course(){}
+
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "code")
@@ -35,12 +38,13 @@ public class Course {
     @ColumnInfo(name = "reading_list_links")
     private ArrayList<String> readingListLinks;
 
+    @ColumnInfo(name = "is_active")
+    private boolean isActive;
 
-    private ArrayList<JSONObject> mCitations;
+    private ArrayList<String> mCitations;
 
 
-    private boolean mIsActive;
-    private boolean mAreCitationsLoaded;
+    private boolean areCitationsLoaded;
 
     public Course(JSONObject courseJSON) {
         try {
@@ -66,8 +70,8 @@ public class Course {
 
             this.mCitations = new ArrayList<>();
 
-            this.mIsActive = courseJSON.getString("status").equals("ACTIVE");
-            this.mAreCitationsLoaded = courseJSON.optBoolean("citations_loaded");
+            this.isActive = courseJSON.getString("status").equals("ACTIVE");
+            this.areCitationsLoaded = courseJSON.optBoolean("citations_loaded");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -75,24 +79,76 @@ public class Course {
 
     }
 
-    public String getCode() { return courseCode; }
-    public void setCode(String value) {courseCode = value;}
+    public int getId() {
+        return id;
+    }
+    public void setId(int id){
+        this.id = id;
+    }
 
-    public String getName() { return courseName; }
-    public void setName(String name) {courseName = name;}
+    public String getCourseCode() {
+        return this.courseCode;
+    }
+    public void setCourseCode(String value) {
+        this.courseCode = value;
+    }
 
-    public String getCourseLink() { return courseLink; }
-    public void setCourseLink(String link) {courseLink = link;}
+    public String getCourseName() {
+        return this.courseName;
+    }
+    public void setCourseName(String name) {
+        this.courseName = name;
+    }
 
-    public ArrayList<String[]> getInstructors() { return courseInstructors; }
-    public void setInstructors(ArrayList<String[]> instructors) {courseInstructors = instructors;}
-    public void addInstructor(String[] instructor) {courseInstructors.add(instructor);}
+    public String getCourseLink() {
+        return this.courseLink;
+    }
+    public void setCourseLink(String link) {
+        this.courseLink = link;
+    }
 
-    public ArrayList<String> getReadingLists() { return readingListLinks; }
-    public void setReadingLists(ArrayList<String> readingLists) { readingListLinks = readingLists; }
-    public void addReadingList(String readingListLink) { readingListLinks.add(readingListLink); }
+    public ArrayList<String[]> getCourseInstructors() {
+        return this.courseInstructors;
+    }
+    public void setCourseInstructors(ArrayList<String[]> instructors) {
+        this.courseInstructors = instructors;
+    }
+    public void addInstructor(String[] instructor) {
+        this.courseInstructors.add(instructor);
+    }
 
-    public ArrayList<JSONObject> getCitations(){ return mCitations; }
-    public void addCitation(JSONObject citation) { mCitations.add(citation); }
+    public ArrayList<String> getReadingListLinks() {
+        return this.readingListLinks;
+    }
+    public void setReadingListLinks(ArrayList<String> readingLists) {
+        this.readingListLinks = readingLists;
+    }
+    public void addReadingList(String readingListLink) {
+        this.readingListLinks.add(readingListLink);
+    }
+
+    public boolean getIsActive() {
+        return this.isActive;
+    }
+    public void setIsActive(boolean value) {
+        this.isActive = value;
+    }
+
+    public ArrayList<String> getCitations(){
+        return mCitations;
+    }
+    public void setCitations(ArrayList<String> list){
+        mCitations = list;
+    }
+    public void addCitation(String citation) {
+        mCitations.add(citation);
+    }
+
+    public boolean getAreCitationsLoaded() {
+        return this.areCitationsLoaded;
+    }
+    public void setAreCitationsLoaded(boolean value) {
+        this.areCitationsLoaded = value;
+    }
 
 }

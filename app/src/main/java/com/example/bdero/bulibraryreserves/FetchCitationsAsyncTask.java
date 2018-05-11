@@ -41,8 +41,8 @@ public class FetchCitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,Ar
         ArrayList<Course> curCourse = courseList[0];
         ArrayList<String> rlLinks = new ArrayList<>();
         for (Course course : curCourse) {
-            rlLinks.addAll(course.getReadingLists());
-            for (String link : course.getReadingLists()){
+            rlLinks.addAll(course.getReadingListLinks());
+            for (String link : course.getReadingListLinks()){
                 URL citationURL = NetworkUtils.buildCitationsURL(mContext, link);
                 try {
                     String citationsResponse = NetworkUtils.getResponseFromHttpUrl(citationURL);
