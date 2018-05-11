@@ -171,7 +171,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
                 mAreCitationsExpanded = true;
                 if (!mAreCitationsLoaded){
                     //TODO: Initiate the CitationsAsyncTask
-                    new FetchCitationsAsyncTask(mContext,this).execute(mCourse);
+                    new CitationsAsyncTask(mContext,this).execute(mCourse);
                 }
 
             }

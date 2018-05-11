@@ -18,15 +18,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class FetchCitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,ArrayList<String>> {
+public class CitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,ArrayList<String>> {
 
-    private static final String CITATION_TASK_LOG_TAG = FetchCitationsAsyncTask.class.getSimpleName();
+    private static final String CITATION_TASK_LOG_TAG = CitationsAsyncTask.class.getSimpleName();
 
     private final Context mContext;
     private final CourseHolder mCourseHolder;
 
 
-    FetchCitationsAsyncTask (Context context, CourseListAdapter.CourseHolder holder){
+    CitationsAsyncTask(Context context, CourseListAdapter.CourseHolder holder){
         mCourseHolder = holder;
         mContext = context;
     }

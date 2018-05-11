@@ -19,7 +19,7 @@ import java.net.URL;
 
 public class CourseListActivity extends AppCompatActivity {
 
-    private static final String CITATION_TASK_LOG_TAG = FetchCitationsAsyncTask.class.getSimpleName();
+    private static final String CITATION_TASK_LOG_TAG = CitationsAsyncTask.class.getSimpleName();
 
     //TODO: Fix course list display error at bottom of screen.
 
@@ -60,7 +60,7 @@ public class CourseListActivity extends AppCompatActivity {
                         Toast.makeText(v.getContext(),"Searching for course: " + query , Toast.LENGTH_LONG)
                                 .show();
                         URL fetchCoursesURL = NetworkUtils.buildCourseURL(getApplicationContext(), query);
-                        new FetchCourseAsyncTask(CourseListActivity.this).execute(fetchCoursesURL);
+                        new CourseAsyncTask(CourseListActivity.this).execute(fetchCoursesURL);
 
                         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(),0);
@@ -100,7 +100,7 @@ public class CourseListActivity extends AppCompatActivity {
                 mInfoText.setText("");
                 mProgressBar.setVisibility(View.INVISIBLE);
 
-                //Adding the adapter to the RecyclerView is handled in the FetchCourseAsyncTask
+                //Adding the adapter to the RecyclerView is handled in the CourseAsyncTask
                 mCourseRecyclerView.setVisibility(View.VISIBLE);
                 break;
 

@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FetchCourseAsyncTask extends AsyncTask<URL,Course,Void> {
+public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
 
     private static final String TOTAL_RECORD_COUNT = "total_record_count"; // Represents an integer number of results found, saved as a String;
     private static final String COURSE_ARRAY = "course";  // Name of a JSON array of courses found.
@@ -27,9 +27,9 @@ public class FetchCourseAsyncTask extends AsyncTask<URL,Course,Void> {
 
     private final CourseListActivity mCourseListActivity;
 
-    private static final String COURSE_TASK_LOG_TAG = FetchCourseAsyncTask.class.getSimpleName();
+    private static final String COURSE_TASK_LOG_TAG = CourseAsyncTask.class.getSimpleName();
 
-    FetchCourseAsyncTask(CourseListActivity courseListActivity) {
+    CourseAsyncTask(CourseListActivity courseListActivity) {
         mCourseListActivity = courseListActivity;
     }
 
