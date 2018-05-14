@@ -1,4 +1,4 @@
-package com.example.bdero.bulibraryreserves.data;
+package com.example.bdero.bulibraryreserves.db;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

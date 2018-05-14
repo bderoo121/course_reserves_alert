@@ -1,4 +1,4 @@
-package com.example.bdero.bulibraryreserves.data;
+package com.example.bdero.bulibraryreserves.db;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -15,9 +15,9 @@ import java.util.ArrayList;
  */
 
 @Entity
-public class Course {
+public class CourseEntity {
 
-    public Course(){}
+    public CourseEntity(){}
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -46,7 +46,7 @@ public class Course {
 
     private boolean areCitationsLoaded;
 
-    public Course(JSONObject courseJSON) {
+    public CourseEntity(JSONObject courseJSON) {
         try {
             this.courseCode = courseJSON.getString("code");
             this.courseName = courseJSON.getString("name");

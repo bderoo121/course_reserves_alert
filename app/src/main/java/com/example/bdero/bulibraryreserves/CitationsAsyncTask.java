@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.example.bdero.bulibraryreserves.CourseListAdapter.CourseHolder;
-import com.example.bdero.bulibraryreserves.data.Course;
+import com.example.bdero.bulibraryreserves.db.CourseEntity;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 
 import org.json.JSONArray;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class CitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,ArrayList<String>> {
+public class CitationsAsyncTask extends AsyncTask<ArrayList<CourseEntity>,Void,ArrayList<String>> {
 
     private static final String CITATION_TASK_LOG_TAG = CitationsAsyncTask.class.getSimpleName();
 
@@ -37,10 +37,10 @@ public class CitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,ArrayLi
     }
 
     @Override
-    protected ArrayList<String> doInBackground(ArrayList<Course>... courseList) {
-        ArrayList<Course> curCourse = courseList[0];
+    protected ArrayList<String> doInBackground(ArrayList<CourseEntity>... courseList) {
+        ArrayList<CourseEntity> curCourse = courseList[0];
         ArrayList<String> rlLinks = new ArrayList<>();
-        for (Course course : curCourse) {
+        for (CourseEntity course : curCourse) {
             rlLinks.addAll(course.getReadingListLinks());
             for (String link : course.getReadingListLinks()){
                 URL citationURL = NetworkUtils.buildCitationsURL(mContext, link);

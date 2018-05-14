@@ -3,7 +3,8 @@ package com.example.bdero.bulibraryreserves;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.bdero.bulibraryreserves.data.Course;
+import com.example.bdero.bulibraryreserves.db.CourseEntity;
+import com.example.bdero.bulibraryreserves.db.CourseResponse;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 import com.google.gson.Gson;
 
@@ -16,7 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
+public class CourseAsyncTask extends AsyncTask<URL,CourseEntity,Void> {
 
     private static final String TOTAL_RECORD_COUNT = "total_record_count"; // Represents an integer number of results found, saved as a String;
     private static final String COURSE_ARRAY = "course";  // Name of a JSON array of courses found.
@@ -47,13 +48,18 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
         // TODO: Fix the try catching in this section. Ugh
         try{
             String courseList = NetworkUtils.getResponseFromHttpUrl(urls[0]);
-            Log.d(COURSE_TASK_LOG_TAG, new Gson().fromJson(courseList, com.example.bdero.bulibraryreserves.data.CourseResponse.class).toString());
+
+            // GSON code starts here:
+                CourseResponse response = new Gson().fromJson(courseList, CourseResponse.class);
+                Log.d(COURSE_TASK_LOG_TAG, response.toString());
+            // GSON code ends here.
+
             JSONObject courseResults = new JSONObject(courseList);
             if (Integer.parseInt(courseResults.getString(TOTAL_RECORD_COUNT)) == 0){
                 Log.d(COURSE_TASK_LOG_TAG,"Valid results, but no records found.");
                 return null;
             }
-            HashMap<String,ArrayList<Course>> output = new HashMap<>();
+            HashMap<String,ArrayList<CourseEntity>> output = new HashMap<>();
             /*
              * Data will be structured as follows:
              * {"MA123": JSONArray of course items with code MA123
@@ -81,10 +87,10 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
                     // If this is the first time encountering that course code, add a new
                     // course JSONObject to the output
                     if (!output.containsKey(curCourseCode)){
-                        output.put(curCourseCode, new ArrayList<Course>());
+                        output.put(curCourseCode, new ArrayList<CourseEntity>());
                     }
 
-                    Course c = new Course(curCourse);
+                    CourseEntity c = new CourseEntity(curCourse);
 
                     // Build upon the given course URL to fetch its attached reading lists.
                     URL readingListsURL = NetworkUtils.buildReadingListURL(mCourseListActivity, c.getCourseLink());
@@ -98,7 +104,7 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
                         c.addReadingList(curReadingList.getString("link"));
                     }
 
-                    Log.d(COURSE_TASK_LOG_TAG, "Course item: " + curCourse.toString());
+                    Log.d(COURSE_TASK_LOG_TAG, "CourseEntity item: " + curCourse.toString());
                     // Put course information into its new container.
                     output.get(curCourseCode).add(c);
                     Log.d(COURSE_TASK_LOG_TAG, "Hash map: " + output.toString());
@@ -118,9 +124,9 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
     }
 
     @Override
-    protected void onProgressUpdate(Course... courseValues) {
+    protected void onProgressUpdate(CourseEntity... courseValues) {
         super.onProgressUpdate(courseValues);
-        for (Course courseItem : courseValues) {
+        for (CourseEntity courseItem : courseValues) {
             String code = courseItem.getCourseCode();
 
             // If adapter doesn't have this course, add it to the list.

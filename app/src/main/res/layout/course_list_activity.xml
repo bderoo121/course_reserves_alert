@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Instruciton or alert text. In pre-search, gives advice about searching for course codes.
+    <!-- Instruction or alert text. In pre-search, gives advice about searching for course codes.
          In post-search, if there are no results, it explains the situation to the user-->
     <TextView
         android:id="@+id/tv_info_text"

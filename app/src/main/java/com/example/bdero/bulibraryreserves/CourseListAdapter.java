@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.bdero.bulibraryreserves.data.Course;
+import com.example.bdero.bulibraryreserves.db.CourseEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
     private static final String LOG_TAG = CourseListAdapter.class.getSimpleName();
 
-    public HashMap<String,ArrayList<Course>> mDataSet;
+    public HashMap<String,ArrayList<CourseEntity>> mDataSet;
 
     //Will hold the course titles
     private ArrayList<String> mCourseCodes; //TODO: Review whether this is necessary with the hashmap structure
@@ -38,7 +38,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         mContext = context;
     }
 
-    public CourseListAdapter(Context context, HashMap<String,ArrayList<Course>> courseData){
+    public CourseListAdapter(Context context, HashMap<String,ArrayList<CourseEntity>> courseData){
         this(context);
         mDataSet = courseData;
         mCourseCodes = new ArrayList<>(mDataSet.keySet());
@@ -49,11 +49,11 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     }
 
     void addNewCourse(String code) {
-        mDataSet.put(code, new ArrayList<Course>());
+        mDataSet.put(code, new ArrayList<CourseEntity>());
         mCourseCodes.add(code);
     }
 
-    void addCourseInfo(String code, Course course) {
+    void addCourseInfo(String code, CourseEntity course) {
         mDataSet.get(code).add(course);
     }
 
@@ -125,7 +125,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         ProgressBar mCitationsProgBar;
 
         Context mContext;
-        ArrayList<Course> mCourse;
+        ArrayList<CourseEntity> mCourse;
         ArrayAdapter<String> mCitationsAdapter;
 
         private CourseHolder(View holder){
@@ -145,7 +145,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
             mCourseWrapper.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.v(HOLDER_LOG_TAG, "Course wrapper clicked on.");
+                    Log.v(HOLDER_LOG_TAG, "CourseEntity wrapper clicked on.");
                     toggleCitationView();
                 }
             });
