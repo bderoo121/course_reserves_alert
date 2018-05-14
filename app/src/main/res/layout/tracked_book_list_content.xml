@@ -12,7 +12,7 @@
         android:id="@+id/book_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/tracked_book_list_item"></android.support.v7.widget.RecyclerView>
+        tools:listitem="@layout/tracked_book_list_item"/>
 
     <!-- The empty view will remind people to subscribe to books if there aren't any-->
     <TextView
@@ -20,6 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You aren't following any course materials yet. Press the + to get started."
+        android:text="@string/not_tracking_yet"
         tools:visibility="invisible"/>
 </FrameLayout>

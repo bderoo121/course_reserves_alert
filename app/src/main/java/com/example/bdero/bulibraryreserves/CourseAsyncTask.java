@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.bdero.bulibraryreserves.db.CourseEntity;
 import com.example.bdero.bulibraryreserves.db.CourseResponse;
+import com.example.bdero.bulibraryreserves.db.CourseResponse.Course;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 import com.google.gson.Gson;
 
@@ -52,6 +53,23 @@ public class CourseAsyncTask extends AsyncTask<URL,CourseEntity,Void> {
             // GSON code starts here:
                 CourseResponse response = new Gson().fromJson(courseList, CourseResponse.class);
                 Log.d(COURSE_TASK_LOG_TAG, response.toString());
+                if (response.getCount() == 0){
+                    Log.d(COURSE_TASK_LOG_TAG,"Valid results, but no records found.");
+                    return null;
+                }
+                for (Course course : response.getCourses()){
+                    //Only continue if the course is still active.
+                    if (course.getStatus().equals(STATUS_ACTIVE)){
+                        //Display any course code only once.
+                        URL readingListsURL = NetworkUtils.buildReadingListURL(mCourseListActivity, course.getLink());
+                        String rlResponse = NetworkUtils.getResponseFromHttpUrl(readingListsURL);
+
+                        if (response.getEncounteredCourses().contains(course.getCode())){
+                            //Do something.
+                        }
+                    }
+                }
+
             // GSON code ends here.
 
             JSONObject courseResults = new JSONObject(courseList);
@@ -90,6 +108,7 @@ public class CourseAsyncTask extends AsyncTask<URL,CourseEntity,Void> {
                         output.put(curCourseCode, new ArrayList<CourseEntity>());
                     }
 
+                    //TODO: This shouldn't need a CourseEntity
                     CourseEntity c = new CourseEntity(curCourse);
 
                     // Build upon the given course URL to fetch its attached reading lists.

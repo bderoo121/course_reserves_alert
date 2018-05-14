@@ -7,10 +7,12 @@ import java.util.Arrays;
 
 public class CourseResponse {
     @SerializedName("course")
-    Course[] courses;
+    private Course[] courses;
 
     @SerializedName("total_record_count")
-    int record_count;
+    private int count;
+
+    private ArrayList<String> encounteredCourses = new ArrayList<>();
 
     public Course[] getCourses() {
         return courses;
@@ -20,34 +22,38 @@ public class CourseResponse {
         this.courses = courses;
     }
 
-    public int getRecord_count() {
-        return record_count;
+    public int getCount() {
+        return count;
     }
 
-    public void setRecord_count(int record_count) {
-        this.record_count = record_count;
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public ArrayList<String> getEncounteredCourses(){
+        return encounteredCourses;
+    }
+
+    public void recordCourseCode(String code){
+        encounteredCourses.add(code);
     }
 
     @Override
     public String toString() {
         return "CourseResponse{" +
                 "courses=" + Arrays.toString(courses) +
-                ", record_count=" + record_count +
+                ", record_count=" + count +
                 '}';
     }
 
-    class Course {
+    public class Course {
         private long id;
         private String code;
         private String name;
         private String section;
         private String status;
         private String link;
-        private ArrayList<String> rlLinks;
-
-        private Course(){
-            rlLinks = new ArrayList<>();
-        }
+        private ArrayList<String> rlLinks = new ArrayList<>();
 
         public long getId() {
             return id;
