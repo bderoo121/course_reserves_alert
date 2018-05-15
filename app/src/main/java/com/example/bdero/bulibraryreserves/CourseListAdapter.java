@@ -110,6 +110,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         }
     }
 
+    public void clear() {
+        final int size = mDataSet.size();
+        mDataSet.clear();
+        notifyItemRangeRemoved(0,size);
+    }
+
     public static class CourseHolder extends RecyclerView.ViewHolder{
 
         private static final String HOLDER_LOG_TAG = CourseHolder.class.getSimpleName();

@@ -59,6 +59,8 @@ public class CourseListActivity extends AppCompatActivity {
                     if (!query.equals("")){
                         Toast.makeText(v.getContext(),"Searching for course: " + query , Toast.LENGTH_LONG)
                                 .show();
+
+                        mAdapter.clear();
                         URL fetchCoursesURL = NetworkUtils.buildCourseURL(getApplicationContext(), query);
                         new CourseAsyncTask(CourseListActivity.this).execute(fetchCoursesURL);
 
