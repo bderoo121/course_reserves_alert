@@ -3,7 +3,6 @@ package com.example.bdero.bulibraryreserves;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.bdero.bulibraryreserves.db.CourseEntity;
 import com.example.bdero.bulibraryreserves.db.CourseResponse;
 import com.example.bdero.bulibraryreserves.db.CourseResponse.Course;
 import com.example.bdero.bulibraryreserves.db.RLResponse;
@@ -11,16 +10,11 @@ import com.example.bdero.bulibraryreserves.db.RLResponse.ReadingList;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class CourseAsyncTask extends AsyncTask<URL,CourseEntity,Void> {
+public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
 
     private static final String TOTAL_RECORD_COUNT = "total_record_count"; // Represents an integer number of results found, saved as a String;
     private static final String COURSE_ARRAY = "course";  // Name of a JSON array of courses found.
@@ -52,53 +46,49 @@ public class CourseAsyncTask extends AsyncTask<URL,CourseEntity,Void> {
         try{
             String courseList = NetworkUtils.getResponseFromHttpUrl(urls[0]);
 
-            // GSON code starts here:
-                CourseResponse courseResponse = new Gson().fromJson(courseList, CourseResponse.class);
-                Log.d(COURSE_TASK_LOG_TAG, courseResponse.toString());
-                if (courseResponse.getCount() == 0){
-                    Log.d(COURSE_TASK_LOG_TAG,"Valid results, but no records found.");
-                    return null;
-                }
-                for (Course course : courseResponse.getCourses()){
-                    //Only continue if the course is still active.
-                    if (course.getStatus().equals(STATUS_ACTIVE)){
-                        //Initialize the array of reading list links
-                        course.setRLLinks(new ArrayList<String>());
+            // New GSON code starts here:
+            //TODO: Ensure equivalence of GSON & JSON code.
+            CourseResponse courseResponse = new Gson().fromJson(courseList, CourseResponse.class);
+            Log.d(COURSE_TASK_LOG_TAG, courseResponse.toString());
+            if (courseResponse.getCount() == 0){
+                Log.d(COURSE_TASK_LOG_TAG,"Valid results, but no records found.");
+                return null;
+            }
+            for (Course course : courseResponse.getCourses()){
+                //Only continue if the course is still active.
+                if (course.getStatus().equals(STATUS_ACTIVE)){
+                    //Initialize the array of reading list links
+                    course.setRLLinks(new ArrayList<String>());
 
-                        URL readingListsURL = NetworkUtils.buildReadingListURL(mCourseListActivity, course.getLink());
-                        String readingLists = NetworkUtils.getResponseFromHttpUrl(readingListsURL);
-                        RLResponse rlResponse = new Gson().fromJson(readingLists, RLResponse.class);
+                    URL readingListsURL = NetworkUtils.buildReadingListURL(mCourseListActivity, course.getLink());
+                    String readingLists = NetworkUtils.getResponseFromHttpUrl(readingListsURL);
+                    RLResponse rlResponse = new Gson().fromJson(readingLists, RLResponse.class);
 
-                        //TODO: Include/Exclude based on the different Statuses, Visibilities, and PublishingStatuses
-                        for (ReadingList rl : rlResponse.getReadingLists()){
-                            course.addRLLink(rl.getLink());
-                        }
-
-                        //Display any course code only once.
-                        if (courseResponse.getEncounteredCourses().contains(course.getCode())){
-                            //Do something.
-                        } else {
-                            courseResponse.getEncounteredCourses().add(course.getCode());
-                        }
+                    //TODO: Include/Exclude based on the different Statuses, Visibilities, and PublishingStatuses
+                    for (ReadingList rl : rlResponse.getReadingLists()) {
+                        course.addRLLink(rl.getLink());
+                        publishProgress(course);
+                        //TODO: Add course to database
                     }
                 }
+            }
+            // New GSON code ends here.
 
-            // GSON code ends here.
-
+            /* Old JSON code starts here
             JSONObject courseResults = new JSONObject(courseList);
             if (Integer.parseInt(courseResults.getString(TOTAL_RECORD_COUNT)) == 0){
                 Log.d(COURSE_TASK_LOG_TAG,"Valid results, but no records found.");
                 return null;
             }
             HashMap<String,ArrayList<CourseEntity>> output = new HashMap<>();
-            /*
+
              * Data will be structured as follows:
              * {"MA123": JSONArray of course items with code MA123
              *      [{course info for MA123-1, "reading_list":[]},{course info for MA123-2, "reading_list":[]}],
              *  "BI211": JSONArray of course items with code BI211
              *      [{course info for MA123-1, "reading_list":[]}]
              * }
-             */
+
             JSONArray courseListJSON = courseResults.getJSONArray(COURSE_ARRAY);
             Log.d(COURSE_TASK_LOG_TAG, "Number of Courses: " + courseListJSON.length());
 
@@ -144,24 +134,25 @@ public class CourseAsyncTask extends AsyncTask<URL,CourseEntity,Void> {
                     publishProgress(c);
                 }
             }
+            End of old JSON code*/
+
         } catch (IOException e){
             Log.e(COURSE_TASK_LOG_TAG,"IO error");
             e.printStackTrace();
             return null;
-        } catch (JSONException e){
+        }/* catch (JSONException e){
             Log.e(COURSE_TASK_LOG_TAG, "Error parsing JSON from result String");
             return null;
-        }
+        }*/
         return null;
     }
 
     @Override
-    protected void onProgressUpdate(CourseEntity... courseValues) {
+    protected void onProgressUpdate(Course... courseValues) {
         super.onProgressUpdate(courseValues);
-        for (CourseEntity courseItem : courseValues) {
-            String code = courseItem.getCourseCode();
+        for (Course courseItem : courseValues){
+            String code = courseItem.getCode();
 
-            // If adapter doesn't have this course, add it to the list.
             if (!mCourseListActivity.mAdapter.getCourseCodes().contains(code)){
                 mCourseListActivity.mAdapter.addNewCourse(code);
             }

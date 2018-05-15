@@ -131,7 +131,6 @@ public class NetworkUtils {
             scanner.close();
             return response;
         } finally {
-
             urlConnection.disconnect();
         }
     }

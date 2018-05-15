@@ -13,7 +13,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.bdero.bulibraryreserves.db.CourseEntity;
+import com.example.bdero.bulibraryreserves.db.CourseResponse.Course;
+import com.example.bdero.bulibraryreserves.db.CourseResponse.Instructor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
     private static final String LOG_TAG = CourseListAdapter.class.getSimpleName();
 
-    public HashMap<String,ArrayList<CourseEntity>> mDataSet;
+    public HashMap<String,ArrayList<Course>> mDataSet;
 
     //Will hold the course titles
     private ArrayList<String> mCourseCodes; //TODO: Review whether this is necessary with the hashmap structure
@@ -38,7 +39,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         mContext = context;
     }
 
-    public CourseListAdapter(Context context, HashMap<String,ArrayList<CourseEntity>> courseData){
+    public CourseListAdapter(Context context, HashMap<String,ArrayList<Course>> courseData){
         this(context);
         mDataSet = courseData;
         mCourseCodes = new ArrayList<>(mDataSet.keySet());
@@ -49,11 +50,11 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     }
 
     void addNewCourse(String code) {
-        mDataSet.put(code, new ArrayList<CourseEntity>());
+        mDataSet.put(code, new ArrayList<Course>());
         mCourseCodes.add(code);
     }
 
-    void addCourseInfo(String code, CourseEntity course) {
+    void addCourseInfo(String code, Course course) {
         mDataSet.get(code).add(course);
     }
 
@@ -82,17 +83,17 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
         // Use the title listed for the first object under the course
         // TODO: Implement a better way to handle multiple/missing course titles.
-        String courseName = holder.mCourse.get(0).getCourseName();
+        String courseName = holder.mCourse.get(0).getName();
         holder.mCourseName.setText(courseName);
 
         // TODO: Implement a better way to handle multiple/missing course instructors.
-        ArrayList<String[]> courseInstructors = holder.mCourse.get(0).getCourseInstructors();
-        if (courseInstructors.size() > 0){
+        Instructor[] courseInstructors = holder.mCourse.get(0).getInstructors();
+        if (courseInstructors.length > 0){
 
             // CourseInstructor array object: [prim_identifier, first_name, last_name]
-            String firstInstructor = "Prof. " + courseInstructors.get(0)[2];
+            String firstInstructor = "Prof. " + courseInstructors[0].getLast_name();
 
-            if (courseInstructors.size() > 1){
+            if (courseInstructors.length > 1){
                 holder.mClassInstructor.setText(firstInstructor + ", ...");
             } else {
                 holder.mClassInstructor.setText(firstInstructor);
@@ -125,7 +126,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         ProgressBar mCitationsProgBar;
 
         Context mContext;
-        ArrayList<CourseEntity> mCourse;
+        ArrayList<Course> mCourse;
         ArrayAdapter<String> mCitationsAdapter;
 
         private CourseHolder(View holder){
@@ -171,7 +172,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
                 mAreCitationsExpanded = true;
                 if (!mAreCitationsLoaded){
                     //TODO: Initiate the CitationsAsyncTask
-                    new CitationsAsyncTask(mContext,this).execute(mCourse);
+                   // new CitationsAsyncTask(mContext,this).execute(mCourse);
                 }
 
             }

@@ -12,8 +12,6 @@ public class CourseResponse {
     @SerializedName("total_record_count")
     private int count;
 
-    private ArrayList<String> encounteredCourses = new ArrayList<>();
-
     public Course[] getCourses() {
         return courses;
     }
@@ -30,14 +28,6 @@ public class CourseResponse {
         this.count = count;
     }
 
-    public ArrayList<String> getEncounteredCourses(){
-        return encounteredCourses;
-    }
-
-    public void recordCourseCode(String code){
-        encounteredCourses.add(code);
-    }
-
     @Override
     public String toString() {
         return "CourseResponse{" +
@@ -52,6 +42,8 @@ public class CourseResponse {
         private String name;
         private String section;
         private String status;
+        @SerializedName("instructor")
+        private Instructor[] instructors;
         private String link;
         private ArrayList<String> rlLinks;
 
@@ -95,6 +87,14 @@ public class CourseResponse {
             this.status = status;
         }
 
+        public Instructor[] getInstructors() {
+            return instructors;
+        }
+
+        public void setInstructors(Instructor[] instructors) {
+            this.instructors = instructors;
+        }
+
         public String getLink() {
             return link;
         }
@@ -126,6 +126,32 @@ public class CourseResponse {
                     ", link='" + link + '\'' +
                     ", rlLinks=" + rlLinks +
                     '}';
+        }
+    }
+
+    public class Instructor {
+        String first_name;
+        String last_name;
+
+        public String getFirst_name() {
+            return first_name;
+        }
+
+        public void setFirst_name(String first_name) {
+            this.first_name = first_name;
+        }
+
+        public String getLast_name() {
+            return last_name;
+        }
+
+        public void setLast_name(String last_name) {
+            this.last_name = last_name;
+        }
+
+        @Override
+        public String toString() {
+            return first_name + ' ' + last_name;
         }
     }
 }
