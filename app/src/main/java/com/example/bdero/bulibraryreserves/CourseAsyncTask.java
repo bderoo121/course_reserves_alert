@@ -6,6 +6,8 @@ import android.util.Log;
 import com.example.bdero.bulibraryreserves.db.CourseEntity;
 import com.example.bdero.bulibraryreserves.db.CourseResponse;
 import com.example.bdero.bulibraryreserves.db.CourseResponse.Course;
+import com.example.bdero.bulibraryreserves.db.RLResponse;
+import com.example.bdero.bulibraryreserves.db.RLResponse.ReadingList;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 import com.google.gson.Gson;
 
@@ -51,21 +53,32 @@ public class CourseAsyncTask extends AsyncTask<URL,CourseEntity,Void> {
             String courseList = NetworkUtils.getResponseFromHttpUrl(urls[0]);
 
             // GSON code starts here:
-                CourseResponse response = new Gson().fromJson(courseList, CourseResponse.class);
-                Log.d(COURSE_TASK_LOG_TAG, response.toString());
-                if (response.getCount() == 0){
+                CourseResponse courseResponse = new Gson().fromJson(courseList, CourseResponse.class);
+                Log.d(COURSE_TASK_LOG_TAG, courseResponse.toString());
+                if (courseResponse.getCount() == 0){
                     Log.d(COURSE_TASK_LOG_TAG,"Valid results, but no records found.");
                     return null;
                 }
-                for (Course course : response.getCourses()){
+                for (Course course : courseResponse.getCourses()){
                     //Only continue if the course is still active.
                     if (course.getStatus().equals(STATUS_ACTIVE)){
-                        //Display any course code only once.
-                        URL readingListsURL = NetworkUtils.buildReadingListURL(mCourseListActivity, course.getLink());
-                        String rlResponse = NetworkUtils.getResponseFromHttpUrl(readingListsURL);
+                        //Initialize the array of reading list links
+                        course.setRLLinks(new ArrayList<String>());
 
-                        if (response.getEncounteredCourses().contains(course.getCode())){
+                        URL readingListsURL = NetworkUtils.buildReadingListURL(mCourseListActivity, course.getLink());
+                        String readingLists = NetworkUtils.getResponseFromHttpUrl(readingListsURL);
+                        RLResponse rlResponse = new Gson().fromJson(readingLists, RLResponse.class);
+
+                        //TODO: Include/Exclude based on the different Statuses, Visibilities, and PublishingStatuses
+                        for (ReadingList rl : rlResponse.getReadingLists()){
+                            course.addRLLink(rl.getLink());
+                        }
+
+                        //Display any course code only once.
+                        if (courseResponse.getEncounteredCourses().contains(course.getCode())){
                             //Do something.
+                        } else {
+                            courseResponse.getEncounteredCourses().add(course.getCode());
                         }
                     }
                 }

@@ -53,7 +53,7 @@ public class CourseResponse {
         private String section;
         private String status;
         private String link;
-        private ArrayList<String> rlLinks = new ArrayList<>();
+        private ArrayList<String> rlLinks;
 
         public long getId() {
             return id;
@@ -101,6 +101,18 @@ public class CourseResponse {
 
         public void setLink(String link) {
             this.link = link;
+        }
+
+        public ArrayList<String> getRlLinks() {
+            return rlLinks;
+        }
+
+        public void setRLLinks(ArrayList<String> rlLinks) {
+            this.rlLinks = rlLinks;
+        }
+
+        public void addRLLink(String link){
+            this.rlLinks.add(link);
         }
 
         @Override
