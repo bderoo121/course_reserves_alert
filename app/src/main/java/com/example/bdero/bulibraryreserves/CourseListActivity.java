@@ -59,14 +59,12 @@ public class CourseListActivity extends AppCompatActivity {
                     if (!query.equals("")){
                         Toast.makeText(v.getContext(),"Searching for course: " + query , Toast.LENGTH_LONG)
                                 .show();
-
                         mAdapter.clear();
                         URL fetchCoursesURL = NetworkUtils.buildCourseURL(getApplicationContext(), query);
                         new CourseAsyncTask(CourseListActivity.this).execute(fetchCoursesURL);
 
                         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(),0);
-                        mAdapter = new CourseListAdapter(getBaseContext());
 
                         return true;
                     }
@@ -85,7 +83,7 @@ public class CourseListActivity extends AppCompatActivity {
                 //mCourseRecyclerView.setVisibility(View.INVISIBLE);
                 mAdapter = new CourseListAdapter(getBaseContext());
                 mCourseRecyclerView.setAdapter(mAdapter);
-                mInfoText.setText("Search for your classes to see course materials available through BU Libraries. Use course codes like &quot;BI203&quot;");
+                mInfoText.setText(R.string.instruction_text);
                 mInfoText.setVisibility(View.VISIBLE);
                 break;
 

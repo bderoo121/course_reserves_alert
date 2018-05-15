@@ -6,4 +6,5 @@
     <string name="add_alert">Add alert</string>
     <string name="alert_added">Alert added!</string>
     <string name="not_tracking_yet">You aren\'t following any course materials yet. Press the + to get started.</string>
+    <string name="instruction_text">Search for your classes to see course materials available through BU Libraries. Use course codes like \"BI203\".</string>
 </resources>

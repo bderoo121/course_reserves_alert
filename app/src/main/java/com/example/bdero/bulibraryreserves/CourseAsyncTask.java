@@ -1,5 +1,6 @@
 package com.example.bdero.bulibraryreserves;
 
+import android.nfc.FormatException;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -44,15 +45,14 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
         // TODO: Use the API given errors instead of using own.
         // TODO: Fix the try catching in this section. Ugh
         try{
-            String courseList = NetworkUtils.getResponseFromHttpUrl(urls[0]);
+            String courseListString = NetworkUtils.getResponseFromHttpUrl(urls[0]);
 
             // New GSON code starts here:
             //TODO: Ensure equivalence of GSON & JSON code.
-            CourseResponse courseResponse = new Gson().fromJson(courseList, CourseResponse.class);
+            CourseResponse courseResponse = new Gson().fromJson(courseListString, CourseResponse.class);
             Log.d(COURSE_TASK_LOG_TAG, courseResponse.toString());
             if (courseResponse.getCount() == 0){
-                Log.d(COURSE_TASK_LOG_TAG,"Valid results, but no records found.");
-                return null;
+                throw new FormatException("No courses match query " + urls[0].toString());
             }
             for (Course course : courseResponse.getCourses()){
                 //Only continue if the course is still active.
@@ -64,11 +64,12 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
                     String readingLists = NetworkUtils.getResponseFromHttpUrl(readingListsURL);
                     RLResponse rlResponse = new Gson().fromJson(readingLists, RLResponse.class);
 
-                    //TODO: Include/Exclude based on the different Statuses, Visibilities, and PublishingStatuses
-                    for (ReadingList rl : rlResponse.getReadingLists()) {
-                        course.addRLLink(rl.getLink());
+                    if (rlResponse.getReadingLists() != null) {
+                        //TODO: Include/Exclude based on the different Statuses, Visibilities, and PublishingStatuses
+                        for (ReadingList rl : rlResponse.getReadingLists())  {
+                            course.addRLLink(rl.getLink());
+                        }
                         publishProgress(course);
-                        //TODO: Add course to database
                     }
                 }
             }
@@ -139,8 +140,10 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
         } catch (IOException e){
             Log.e(COURSE_TASK_LOG_TAG,"IO error");
             e.printStackTrace();
-            return null;
-        }/* catch (JSONException e){
+        } catch (FormatException e){
+            Log.d(COURSE_TASK_LOG_TAG,e.getMessage());
+        }
+        /* catch (JSONException e){
             Log.e(COURSE_TASK_LOG_TAG, "Error parsing JSON from result String");
             return null;
         }*/
@@ -151,16 +154,18 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
     protected void onProgressUpdate(Course... courseValues) {
         super.onProgressUpdate(courseValues);
         for (Course courseItem : courseValues){
+            CourseListAdapter adapter = mCourseListActivity.mAdapter;
             String code = courseItem.getCode();
 
-            if (!mCourseListActivity.mAdapter.getCourseCodes().contains(code)){
-                mCourseListActivity.mAdapter.addNewCourse(code);
+            if (!adapter.getCourseCodes().contains(code)){
+                adapter.addNewCourse(code);
             }
 
             // Reset the RecyclerView with the new adapter
             // TODO: Make this code work using notifyDataSetChanged to prevent reloading everything.
-            mCourseListActivity.mAdapter.addCourseInfo(code, courseItem);
-            mCourseListActivity.mCourseRecyclerView.setAdapter(mCourseListActivity.mAdapter);
+            adapter.addCourseInfo(code, courseItem);
+            adapter.notifyItemInserted(adapter.mDataSet.size());
+            //mCourseListActivity.mCourseRecyclerView.setAdapter(mCourseListActivity.mAdapter);
         }
     }
 
