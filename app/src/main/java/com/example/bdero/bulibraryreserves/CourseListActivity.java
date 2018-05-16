@@ -109,7 +109,7 @@ public class CourseListActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.INVISIBLE);
                 mCourseRecyclerView.setVisibility(View.INVISIBLE);
                 mInfoText.setVisibility(View.VISIBLE);
-                mInfoText.setText("No courses under that code could be found. Please try again.");
+                mInfoText.setText(R.string.no_matches_found);
                 break;
 
             default:

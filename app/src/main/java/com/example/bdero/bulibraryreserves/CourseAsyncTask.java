@@ -26,6 +26,7 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
     private static final String READING_LISTS = "reading_list";  // Name of a JSON array of reading lists attached to a course.
 
     private final CourseListActivity mCourseListActivity;
+    private boolean mSucceeded = false;
 
     private static final String COURSE_TASK_LOG_TAG = CourseAsyncTask.class.getSimpleName();
 
@@ -73,75 +74,14 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
                     }
                 }
             }
-            // New GSON code ends here.
-
-            /* Old JSON code starts here
-            JSONObject courseResults = new JSONObject(courseList);
-            if (Integer.parseInt(courseResults.getString(TOTAL_RECORD_COUNT)) == 0){
-                Log.d(COURSE_TASK_LOG_TAG,"Valid results, but no records found.");
-                return null;
-            }
-            HashMap<String,ArrayList<CourseEntity>> output = new HashMap<>();
-
-             * Data will be structured as follows:
-             * {"MA123": JSONArray of course items with code MA123
-             *      [{course info for MA123-1, "reading_list":[]},{course info for MA123-2, "reading_list":[]}],
-             *  "BI211": JSONArray of course items with code BI211
-             *      [{course info for MA123-1, "reading_list":[]}]
-             * }
-
-            JSONArray courseListJSON = courseResults.getJSONArray(COURSE_ARRAY);
-            Log.d(COURSE_TASK_LOG_TAG, "Number of Courses: " + courseListJSON.length());
-
-            for (int course = 0; course < courseListJSON.length(); course++) {
-
-                // Fetch the loop's current course from the received data
-                JSONObject curCourse = courseListJSON.getJSONObject(course);
-                Log.d(COURSE_TASK_LOG_TAG, "Current course JSON: " + curCourse.toString());
-
-                // Ignore any inactive courses
-                if (curCourse.getString(COURSE_STATUS).equals(STATUS_ACTIVE)) {
-
-                    // Fetch the current course's code for easy access
-                    String curCourseCode = curCourse.getString(COURSE_CODE);
-                    Log.d(COURSE_TASK_LOG_TAG, "Encountered course " + curCourseCode);
-
-                    // If this is the first time encountering that course code, add a new
-                    // course JSONObject to the output
-                    if (!output.containsKey(curCourseCode)){
-                        output.put(curCourseCode, new ArrayList<CourseEntity>());
-                    }
-
-                    //TODO: This shouldn't need a CourseEntity
-                    CourseEntity c = new CourseEntity(curCourse);
-
-                    // Build upon the given course URL to fetch its attached reading lists.
-                    URL readingListsURL = NetworkUtils.buildReadingListURL(mCourseListActivity, c.getCourseLink());
-                    JSONObject readingListsJSON = new JSONObject(NetworkUtils.getResponseFromHttpUrl(readingListsURL));
-
-                    for (int indReadingList = 0; indReadingList < readingListsJSON.getJSONArray(READING_LISTS).length(); indReadingList++){
-                        //TODO: Check for visibility or status.
-                        JSONObject curReadingList = readingListsJSON.getJSONArray(READING_LISTS).getJSONObject(indReadingList);
-
-                        // Add each reading list to the course
-                        c.addReadingList(curReadingList.getString("link"));
-                    }
-
-                    Log.d(COURSE_TASK_LOG_TAG, "CourseEntity item: " + curCourse.toString());
-                    // Put course information into its new container.
-                    output.get(curCourseCode).add(c);
-                    Log.d(COURSE_TASK_LOG_TAG, "Hash map: " + output.toString());
-
-                    publishProgress(c);
-                }
-            }
-            End of old JSON code*/
-
+            mSucceeded = true;
         } catch (IOException e){
             Log.e(COURSE_TASK_LOG_TAG,"IO error");
             e.printStackTrace();
+            mSucceeded = false;
         } catch (FormatException e){
-            Log.d(COURSE_TASK_LOG_TAG,e.getMessage());
+            Log.d(COURSE_TASK_LOG_TAG, e.getMessage());
+            mSucceeded = false;
         }
         /* catch (JSONException e){
             Log.e(COURSE_TASK_LOG_TAG, "Error parsing JSON from result String");
@@ -168,7 +108,11 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        mCourseListActivity.updateViewVisibility(mCourseListActivity.POST_SEARCH);
+        if (mSucceeded){
+            mCourseListActivity.updateViewVisibility(mCourseListActivity.POST_SEARCH);
+        } else {
+            mCourseListActivity.updateViewVisibility(mCourseListActivity.ERR_SEARCH);
+        }
 
     }
 }
