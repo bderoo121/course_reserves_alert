@@ -49,6 +49,9 @@ public class CourseListActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mCourseRecyclerView.setLayoutManager(mLayoutManager);
 
+        mAdapter = new CourseListAdapter(getBaseContext());
+        mCourseRecyclerView.setAdapter(mAdapter);
+
         // Setup the search button in the IME
         mSearchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -81,8 +84,6 @@ public class CourseListActivity extends AppCompatActivity {
             case PRE_SEARCH:
                 mProgressBar.setVisibility(View.INVISIBLE);
                 //mCourseRecyclerView.setVisibility(View.INVISIBLE);
-                mAdapter = new CourseListAdapter(getBaseContext());
-                mCourseRecyclerView.setAdapter(mAdapter);
                 mInfoText.setText(R.string.instruction_text);
                 mInfoText.setVisibility(View.VISIBLE);
                 break;
@@ -107,7 +108,6 @@ public class CourseListActivity extends AppCompatActivity {
             case ERR_SEARCH:
                 mProgressBar.setVisibility(View.INVISIBLE);
                 mCourseRecyclerView.setVisibility(View.INVISIBLE);
-                mCourseRecyclerView.setAdapter(null);
                 mInfoText.setVisibility(View.VISIBLE);
                 mInfoText.setText("No courses under that code could be found. Please try again.");
                 break;
