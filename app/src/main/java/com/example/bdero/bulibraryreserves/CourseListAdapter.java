@@ -18,6 +18,7 @@ import com.example.bdero.bulibraryreserves.db.CourseResponse.Instructor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by bdero on 3/19/2018.
@@ -27,19 +28,19 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
     private static final String LOG_TAG = CourseListAdapter.class.getSimpleName();
 
-    public HashMap<String,ArrayList<Course>> mDataSet;
+    public LinkedHashMap<String,ArrayList<Course>> mDataSet;
 
-    //Will hold the course titles
-    private ArrayList<String> mCourseCodes; //TODO: Review whether this is necessary with the hashmap structure
+    //Will hold the course titles. Important for relating adapter position to the data.
+    private ArrayList<String> mCourseCodes;
     private Context mContext;
 
-    public CourseListAdapter(Context context){
-        mDataSet = new HashMap<>();
+    CourseListAdapter(Context context){
+        mDataSet = new LinkedHashMap<>();
         mCourseCodes = new ArrayList<>();
         mContext = context;
     }
 
-    public CourseListAdapter(Context context, HashMap<String,ArrayList<Course>> courseData){
+    public CourseListAdapter(Context context, LinkedHashMap<String,ArrayList<Course>> courseData){
         this(context);
         mDataSet = courseData;
         mCourseCodes = new ArrayList<>(mDataSet.keySet());

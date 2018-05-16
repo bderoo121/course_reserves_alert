@@ -161,11 +161,8 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
                 adapter.addNewCourse(code);
             }
 
-            // Reset the RecyclerView with the new adapter
-            // TODO: Make this code work using notifyDataSetChanged to prevent reloading everything.
             adapter.addCourseInfo(code, courseItem);
-            adapter.notifyItemInserted(adapter.mDataSet.size());
-            //mCourseListActivity.mCourseRecyclerView.setAdapter(mCourseListActivity.mAdapter);
+            adapter.notifyItemInserted(adapter.getCourseCodes().indexOf(code));
         }
     }
 
