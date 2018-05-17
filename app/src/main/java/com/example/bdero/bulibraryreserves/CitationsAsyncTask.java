@@ -7,18 +7,16 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.example.bdero.bulibraryreserves.CourseListAdapter.CourseHolder;
-import com.example.bdero.bulibraryreserves.db.CourseEntity;
+import com.example.bdero.bulibraryreserves.db.CitationResponse;
+import com.example.bdero.bulibraryreserves.db.CourseResponse.Course;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class CitationsAsyncTask extends AsyncTask<ArrayList<CourseEntity>,Void,ArrayList<String>> {
+public class CitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,ArrayList<String>> {
 
     private static final String CITATION_TASK_LOG_TAG = CitationsAsyncTask.class.getSimpleName();
 
@@ -37,8 +35,29 @@ public class CitationsAsyncTask extends AsyncTask<ArrayList<CourseEntity>,Void,A
     }
 
     @Override
-    protected ArrayList<String> doInBackground(ArrayList<CourseEntity>... courseList) {
-        ArrayList<CourseEntity> curCourse = courseList[0];
+    protected ArrayList<String> doInBackground(ArrayList<Course>... courseList) {
+        ArrayList<Course> courseObj = courseList[0];
+        ArrayList<String> rlLinks = new ArrayList<>();
+        for (Course curCourse : courseObj){
+            rlLinks.addAll(curCourse.getRlLinks());
+        }
+        Log.d(CITATION_TASK_LOG_TAG, rlLinks.toString());
+
+        for (String link : rlLinks){
+            URL citationURL = NetworkUtils.buildCitationsURL(mContext, link);
+            try {
+                String citationResponse = NetworkUtils.getResponseFromHttpUrl(citationURL);
+                Log.d(CITATION_TASK_LOG_TAG, citationResponse);
+                CitationResponse response = new Gson().fromJson(citationResponse, CitationResponse.class);
+                Log.d(CITATION_TASK_LOG_TAG, response.toString());
+
+            } catch (IOException e) {
+                Log.e(CITATION_TASK_LOG_TAG, "IO error.");
+                e.printStackTrace();
+            }
+        }
+
+        /*ArrayList<CourseEntity> curCourse = courseList[0];
         ArrayList<String> rlLinks = new ArrayList<>();
         for (CourseEntity course : curCourse) {
             rlLinks.addAll(course.getReadingListLinks());
@@ -66,7 +85,7 @@ public class CitationsAsyncTask extends AsyncTask<ArrayList<CourseEntity>,Void,A
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
 
         return null;
     }

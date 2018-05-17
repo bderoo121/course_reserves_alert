@@ -17,7 +17,6 @@ import com.example.bdero.bulibraryreserves.db.CourseResponse.Course;
 import com.example.bdero.bulibraryreserves.db.CourseResponse.Instructor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
@@ -179,7 +178,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
                 mAreCitationsExpanded = true;
                 if (!mAreCitationsLoaded){
                     //TODO: Initiate the CitationsAsyncTask
-                   // new CitationsAsyncTask(mContext,this).execute(mCourse);
+                   new CitationsAsyncTask(mContext,this).execute(mCourse);
                 }
 
             }

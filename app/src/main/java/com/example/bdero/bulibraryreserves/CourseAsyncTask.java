@@ -48,8 +48,6 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
         try{
             String courseListString = NetworkUtils.getResponseFromHttpUrl(urls[0]);
 
-            // New GSON code starts here:
-            //TODO: Ensure equivalence of GSON & JSON code.
             CourseResponse courseResponse = new Gson().fromJson(courseListString, CourseResponse.class);
             Log.d(COURSE_TASK_LOG_TAG, courseResponse.toString());
             if (courseResponse.getCount() == 0){
@@ -83,10 +81,6 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
             Log.d(COURSE_TASK_LOG_TAG, e.getMessage());
             mSucceeded = false;
         }
-        /* catch (JSONException e){
-            Log.e(COURSE_TASK_LOG_TAG, "Error parsing JSON from result String");
-            return null;
-        }*/
         return null;
     }
 
