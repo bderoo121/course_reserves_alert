@@ -1,4 +1,4 @@
-package com.example.bdero.bulibraryreserves.db;
+package com.example.bdero.bulibraryreserves;
 
 import com.google.gson.annotations.SerializedName;
 

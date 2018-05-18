@@ -7,8 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.example.bdero.bulibraryreserves.CourseListAdapter.CourseHolder;
-import com.example.bdero.bulibraryreserves.db.CitationResponse;
-import com.example.bdero.bulibraryreserves.db.CourseResponse.Course;
+import com.example.bdero.bulibraryreserves.CourseResponse.Course;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 import com.google.gson.Gson;
 

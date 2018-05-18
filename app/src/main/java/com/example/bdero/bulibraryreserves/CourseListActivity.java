@@ -40,10 +40,10 @@ public class CourseListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_list_activity);
 
-        mSearchBar = (EditText) findViewById(R.id.et_class_search_bar);
-        mInfoText = (TextView) findViewById(R.id.tv_info_text);
-        mProgressBar = (ProgressBar) findViewById(R.id.progbar_class_search);
-        mCourseRecyclerView = (RecyclerView) findViewById(R.id.rv_class_search);
+        mSearchBar = findViewById(R.id.et_class_search_bar);
+        mInfoText = findViewById(R.id.tv_info_text);
+        mProgressBar = findViewById(R.id.progbar_class_search);
+        mCourseRecyclerView = findViewById(R.id.rv_class_search);
 
         // Use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);

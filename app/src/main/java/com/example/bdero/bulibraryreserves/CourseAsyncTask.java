@@ -4,10 +4,8 @@ import android.nfc.FormatException;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.bdero.bulibraryreserves.db.CourseResponse;
-import com.example.bdero.bulibraryreserves.db.CourseResponse.Course;
-import com.example.bdero.bulibraryreserves.db.RLResponse;
-import com.example.bdero.bulibraryreserves.db.RLResponse.ReadingList;
+import com.example.bdero.bulibraryreserves.CourseResponse.Course;
+import com.example.bdero.bulibraryreserves.RLResponse.ReadingList;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 import com.google.gson.Gson;
 

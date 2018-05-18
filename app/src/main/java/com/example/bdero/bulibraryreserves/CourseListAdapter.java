@@ -1,7 +1,9 @@
 package com.example.bdero.bulibraryreserves;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +11,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.bdero.bulibraryreserves.db.CourseResponse.Course;
-import com.example.bdero.bulibraryreserves.db.CourseResponse.Instructor;
+import com.example.bdero.bulibraryreserves.CourseResponse.Course;
+import com.example.bdero.bulibraryreserves.CourseResponse.Instructor;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -54,7 +55,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         mCourseCodes.add(code);
     }
 
-    void addCourseInfo(String code, Course course) {
+    protected void addCourseInfo(String code, Course course) {
         mDataSet.get(code).add(course);
     }
 
@@ -63,6 +64,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
         // Create a new view
         int classLayout = R.layout.course_list_item;
+
+        // Do not attach immediately when using a Viewholder model.
         boolean shouldAttachImmediately = false;
 
         Context context = parent.getContext();
@@ -123,17 +126,19 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         boolean mAreCitationsExpanded = false;
         boolean mAreCitationsLoaded = false;
         View mCourseWrapper;
-        View mCitationsWrapper;
-        ListView mCitationsListView;
         TextView mClassCode;
         TextView mCourseName;
         TextView mClassInstructor;
         ImageButton mExpandCitationsButton;
+
+        View mCitationsWrapper;
+        RecyclerView mCitationsRecyclerView;
+        LayoutManager mLayoutManager; //TODO: Can this be a static variable?
+        CitationAdapter mCitationAdapter;
         ProgressBar mCitationsProgBar;
 
         Context mContext;
         ArrayList<Course> mCourse;
-        ArrayAdapter<String> mCitationsAdapter;
 
         private CourseHolder(View holder){
             super(holder);
@@ -143,10 +148,15 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
             mCourseName = holder.findViewById(R.id.tv_class_name);
             mClassInstructor = holder.findViewById(R.id.tv_class_instructor);
             mExpandCitationsButton = holder.findViewById(R.id.ib_expand_citation_list);
-            mCitationsListView = holder.findViewById(R.id.lv_citation_list);
+            mCitationsRecyclerView = holder.findViewById(R.id.lv_citation_list);
             mCitationsProgBar = holder.findViewById(R.id.progbar_citation_search);
             mCitationsWrapper = holder.findViewById(R.id.fl_citation_wrapper);
             mCourseWrapper = holder.findViewById(R.id.cl_course_wrapper);
+
+            mLayoutManager = new LinearLayoutManager(mContext);
+            mCitationsRecyclerView.setLayoutManager(mLayoutManager);
+            mCitationAdapter = new CitationAdapter();
+            mCitationsRecyclerView.setAdapter(mCitationAdapter);
 
             //When the course information wrapper is clicked on, expand the book information.
             mCourseWrapper.setOnClickListener(new View.OnClickListener() {
@@ -156,17 +166,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
                     toggleCitationView();
                 }
             });
-
-            // When a citation is clicked, add it to the database of saved citations.
-            mCitationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                }
-            });
         }
-
-        void toggleCitationView(){
+        private void toggleCitationView(){
             if(mAreCitationsExpanded){
                 //Citations visible. Shrink the citation list back.
                 mCitationsWrapper.setVisibility(View.GONE);

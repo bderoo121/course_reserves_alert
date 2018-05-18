@@ -44,7 +44,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_class_code"
-            app:layout_constraintEnd_toStartOf="@+id/ib_expand_citation_list"
+            app:layout_constraintEnd_toStartOf="@id/ib_expand_citation_list"
             app:layout_constraintHorizontal_bias="0.52"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/tv_class_code"
@@ -57,8 +57,8 @@
             android:layout_marginTop="4dp"
             android:textColor="@color/colorPrimaryLight"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/tv_class_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_class_name"
+            app:layout_constraintStart_toStartOf="@id/tv_class_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_class_name"
             tools:text="Prof. Teacher" />
 
         <ImageButton
@@ -95,11 +95,11 @@
         android:layout_height="wrap_content"
         android:visibility="gone">
 
-        <ListView
-            android:id="@+id/lv_citation_list"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_citation_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"></ListView>
+            android:visibility="visible"/>
 
         <ProgressBar
             android:id="@+id/progbar_citation_search"
