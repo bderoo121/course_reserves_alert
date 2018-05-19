@@ -7,17 +7,17 @@ import java.util.Arrays;
 public class CitationResponse {
 
     @SerializedName("citation")
-    private Citation[] ciitations;
+    private Citation[] citations;
 
     @SerializedName("link")
     private String citationsLink;
 
-    public Citation[] getCiitations() {
-        return ciitations;
+    public Citation[] getCitations() {
+        return citations;
     }
 
-    public void setCiitations(Citation[] ciitations) {
-        this.ciitations = ciitations;
+    public void setCitations(Citation[] citations) {
+        this.citations = citations;
     }
 
     public String getCitationsLink() {
@@ -31,12 +31,12 @@ public class CitationResponse {
     @Override
     public String toString() {
         return "CitationResponse{" +
-                "ciitations=" + Arrays.toString(ciitations) +
+                "citations=" + Arrays.toString(citations) +
                 ", citationsLink='" + citationsLink + '\'' +
                 '}';
     }
 
-    private class Citation{
+    public class Citation{
         private long id;
         private Status status;
         private CopyrightStatus copyright_status;
