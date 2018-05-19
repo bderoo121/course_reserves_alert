@@ -12,9 +12,9 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.bdero.bulibraryreserves.async.CitationsAsyncTask;
 import com.example.bdero.bulibraryreserves.async.CourseResponse.Course;
 import com.example.bdero.bulibraryreserves.async.CourseResponse.Instructor;
-import com.example.bdero.bulibraryreserves.async.CitationsAsyncTask;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -23,39 +23,26 @@ import java.util.LinkedHashMap;
  * Created by bdero on 3/19/2018.
  */
 
-public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseHolder>{
+public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseHolder> {
 
     private static final String LOG_TAG = CourseListAdapter.class.getSimpleName();
 
-    public LinkedHashMap<String,ArrayList<Course>> mDataSet;
+    public LinkedHashMap<String, ArrayList<Course>> mDataSet;
 
     //Will hold the course titles. Important for relating adapter position to the data.
     private ArrayList<String> mCourseCodes;
     private Context mContext;
 
-    CourseListAdapter(Context context){
+    CourseListAdapter(Context context) {
         mDataSet = new LinkedHashMap<>();
         mCourseCodes = new ArrayList<>();
         mContext = context;
     }
 
-    public CourseListAdapter(Context context, LinkedHashMap<String,ArrayList<Course>> courseData){
+    public CourseListAdapter(Context context, LinkedHashMap<String, ArrayList<Course>> courseData) {
         this(context);
         mDataSet = courseData;
         mCourseCodes = new ArrayList<>(mDataSet.keySet());
-    }
-
-    public ArrayList<String> getCourseCodes(){
-        return mCourseCodes;
-    }
-
-    public void addNewCourse(String code) {
-        mDataSet.put(code, new ArrayList<Course>());
-        mCourseCodes.add(code);
-    }
-
-    public void addCourseInfo(String code, Course course) {
-        mDataSet.get(code).add(course);
     }
 
     @Override
@@ -90,12 +77,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
         // TODO: Implement a better way to handle multiple/missing course instructors.
         Instructor[] courseInstructors = holder.mCourse.get(0).getInstructors();
-        if (courseInstructors.length > 0){
+        if (courseInstructors.length > 0) {
 
             // CourseInstructor array object: [prim_identifier, first_name, last_name]
             String firstInstructor = "Prof. " + courseInstructors[0].getLast_name();
 
-            if (courseInstructors.length > 1){
+            if (courseInstructors.length > 1) {
                 holder.mClassInstructor.setText(firstInstructor + ", ...");
             } else {
                 holder.mClassInstructor.setText(firstInstructor);
@@ -105,25 +92,42 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
     @Override
     public int getItemCount() {
-        if (mDataSet == null){
+        if (mDataSet == null) {
             return 0;
         } else {
             return mDataSet.size();
         }
     }
 
+    public ArrayList<String> getCourseCodes() {
+        return mCourseCodes;
+    }
+
+    public void addNewCourse(String code) {
+        mDataSet.put(code, new ArrayList<Course>());
+        mCourseCodes.add(code);
+    }
+
+    public void addCourseInfo(String code, Course course) {
+        mDataSet.get(code).add(course);
+    }
+
     public void clear() {
         final int size = mDataSet.size();
         mDataSet.clear();
-        notifyItemRangeRemoved(0,size);
+        notifyItemRangeRemoved(0, size);
     }
 
-    public static class CourseHolder extends RecyclerView.ViewHolder{
+    public static class CourseHolder extends RecyclerView.ViewHolder {
 
         private static final String HOLDER_LOG_TAG = CourseHolder.class.getSimpleName();
 
         boolean mAreCitationsExpanded = false;
         boolean mAreCitationsLoaded = false;
+
+        Context mContext;
+        ArrayList<Course> mCourse;
+
         View mCourseWrapper;
         TextView mClassCode;
         TextView mCourseName;
@@ -136,38 +140,38 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         CitationAdapter mCitationAdapter;
         ProgressBar mCitationsProgBar;
 
-        Context mContext;
-        ArrayList<Course> mCourse;
-
-        private CourseHolder(View holder){
+        private CourseHolder(View holder) {
             super(holder);
 
             mContext = holder.getContext();
+
+            mCourseWrapper = holder.findViewById(R.id.cl_course_wrapper);
             mClassCode = holder.findViewById(R.id.tv_class_code);
             mCourseName = holder.findViewById(R.id.tv_class_name);
             mClassInstructor = holder.findViewById(R.id.tv_class_instructor);
             mExpandCitationsButton = holder.findViewById(R.id.ib_expand_citation_list);
-            mCitationsRecyclerView = holder.findViewById(R.id.lv_citation_list);
-            mCitationsProgBar = holder.findViewById(R.id.progbar_citation_search);
-            mCitationsWrapper = holder.findViewById(R.id.fl_citation_wrapper);
-            mCourseWrapper = holder.findViewById(R.id.cl_course_wrapper);
 
+            mCitationsWrapper = holder.findViewById(R.id.fl_citation_wrapper);
+            mCitationsRecyclerView = holder.findViewById(R.id.rv_citation_list);
             mLayoutManager = new LinearLayoutManager(mContext);
-            mCitationsRecyclerView.setLayoutManager(mLayoutManager);
             mCitationAdapter = new CitationAdapter();
+            mCitationsProgBar = holder.findViewById(R.id.progbar_citation_search);
+
+            mCitationsRecyclerView.setLayoutManager(mLayoutManager);
             mCitationsRecyclerView.setAdapter(mCitationAdapter);
 
             //When the course information wrapper is clicked on, expand the book information.
             mCourseWrapper.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.v(HOLDER_LOG_TAG, "CourseEntity wrapper clicked on.");
+                    Log.v(HOLDER_LOG_TAG, "Course wrapper clicked on.");
                     toggleCitationView();
                 }
             });
         }
-        private void toggleCitationView(){
-            if(mAreCitationsExpanded){
+
+        private void toggleCitationView() {
+            if (mAreCitationsExpanded) {
                 //Citations visible. Shrink the citation list back.
                 mCitationsWrapper.setVisibility(View.GONE);
                 mAreCitationsExpanded = false;
@@ -176,14 +180,19 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
                 // Citations invisible. If first time opening, load data. Expand the citation list.
                 mCitationsWrapper.setVisibility(View.VISIBLE);
                 mAreCitationsExpanded = true;
-                if (!mAreCitationsLoaded){
+                if (!mAreCitationsLoaded) {
                     //TODO: Initiate the CitationsAsyncTask
-                   new CitationsAsyncTask(mContext,this).execute(mCourse);
+                    Course[] courseArray = mCourse.toArray(new Course[0]);
+                    new CitationsAsyncTask(mContext, this).execute(courseArray);
                 }
 
             }
         }
+
+        public void setProgBarVisibility(int toState) {
+            if (toState == View.VISIBLE || toState == View.INVISIBLE || toState == View.GONE) {
+                mCitationsProgBar.setVisibility(toState);
+            }
+        }
     }
-
-
 }

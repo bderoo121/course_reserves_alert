@@ -47,7 +47,6 @@ public class CourseListActivity extends AppCompatActivity {
         mProgressBar = findViewById(R.id.progbar_class_search);
         mCourseRecyclerView = findViewById(R.id.rv_class_search);
 
-        // Use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mCourseRecyclerView.setLayoutManager(mLayoutManager);
 

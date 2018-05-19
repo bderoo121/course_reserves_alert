@@ -3,8 +3,10 @@ package com.example.bdero.bulibraryreserves.async;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import com.example.bdero.bulibraryreserves.CourseListAdapter.CourseHolder;
+import com.example.bdero.bulibraryreserves.async.CitationResponse.Citation;
 import com.example.bdero.bulibraryreserves.async.CourseResponse.Course;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 import com.google.gson.Gson;
@@ -13,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class CitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,ArrayList<String>> {
+public class CitationsAsyncTask extends AsyncTask<Course,Void,ArrayList<Citation>> {
 
     private static final String CITATION_TASK_LOG_TAG = CitationsAsyncTask.class.getSimpleName();
 
@@ -32,25 +34,24 @@ public class CitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,ArrayLi
     }
 
     @Override
-    protected ArrayList<String> doInBackground(ArrayList<Course>... courseList) {
-        ArrayList<Course> courseObj = courseList[0];
-        ArrayList<String> rlLinks = new ArrayList<>();
-        for (Course curCourse : courseObj){
-            rlLinks.addAll(curCourse.getRlLinks());
-        }
-        Log.d(CITATION_TASK_LOG_TAG, rlLinks.toString());
+    protected ArrayList<Citation> doInBackground(Course... courses) {
+        ArrayList<Citation> output = new ArrayList<>();
+        //Merge all of the reading list links into a single location.
+        for (Course curCourse : courses){
+            if (curCourse.getCitations() == null) {
+                curCourse.setCitations(new ArrayList<Citation>());
+            }
+            for (String link : curCourse.getRlLinks()){
+                URL citationURL = NetworkUtils.buildCitationsURL(mContext, link);
+                try {
+                    String citationResponse = NetworkUtils.getResponseFromHttpUrl(citationURL);
+                    CitationResponse response = new Gson().fromJson(citationResponse, CitationResponse.class);
+                    curCourse.addCitations(response.getCitations());
 
-        for (String link : rlLinks){
-            URL citationURL = NetworkUtils.buildCitationsURL(mContext, link);
-            try {
-                String citationResponse = NetworkUtils.getResponseFromHttpUrl(citationURL);
-                Log.d(CITATION_TASK_LOG_TAG, citationResponse);
-                CitationResponse response = new Gson().fromJson(citationResponse, CitationResponse.class);
-                Log.d(CITATION_TASK_LOG_TAG, response.toString());
-
-            } catch (IOException e) {
-                Log.e(CITATION_TASK_LOG_TAG, "IO error.");
-                e.printStackTrace();
+                } catch (IOException e) {
+                    Log.e(CITATION_TASK_LOG_TAG, "IO error.");
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -83,22 +84,16 @@ public class CitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,ArrayLi
                 }
             }
         }*/
-
-        return null;
+        return output;
     }
 
 
     @Override
-    protected void onProgressUpdate(Void... values) {
-        super.onProgressUpdate(values);
-    }
-
-    @Override
-    protected void onPostExecute(ArrayList<String> strings) {
-        super.onPostExecute(strings);
+    protected void onPostExecute(ArrayList<Citation> citations) {
+        super.onPostExecute(citations);
 
         //mCourseHolder.mCitationsRecyclerView.setAdapter(new ArrayAdapter<String>(mCourseHolder.mContext, R.layout.tracked_book_list_item));
 
-        //mCourseHolder.mCitationsProgBar.setVisibility(View.GONE);
+        mCourseHolder.setProgBarVisibility(View.GONE);
     }
 }
