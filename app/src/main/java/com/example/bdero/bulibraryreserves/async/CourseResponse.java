@@ -2,6 +2,8 @@ package com.example.bdero.bulibraryreserves.async;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.example.bdero.bulibraryreserves.async.CitationResponse.Citation;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -44,8 +46,10 @@ public class CourseResponse {
         private String status;
         @SerializedName("instructor")
         private Instructor[] instructors;
-        private String link;
+        @SerializedName("link")
+        private String courseLink;
         private ArrayList<String> rlLinks;
+        private ArrayList<Citation> citations;
 
         public long getId() {
             return id;
@@ -95,12 +99,12 @@ public class CourseResponse {
             this.instructors = instructors;
         }
 
-        public String getLink() {
-            return link;
+        public String getCourseLink() {
+            return courseLink;
         }
 
-        public void setLink(String link) {
-            this.link = link;
+        public void setCourseLink(String courseLink) {
+            this.courseLink = courseLink;
         }
 
         public ArrayList<String> getRlLinks() {
@@ -115,6 +119,18 @@ public class CourseResponse {
             this.rlLinks.add(link);
         }
 
+        public ArrayList<Citation> getCitations(){
+            return citations;
+        }
+
+        public void setCitations(ArrayList<Citation> values){
+            citations = values;
+        }
+
+        public void addCitations(Citation... values){
+            citations.addAll(Arrays.asList(values));
+        }
+
         @Override
         public String toString() {
             return "Course{" +
@@ -123,8 +139,9 @@ public class CourseResponse {
                     ", name='" + name + '\'' +
                     ", section='" + section + '\'' +
                     ", status='" + status + '\'' +
-                    ", link='" + link + '\'' +
+                    ", courseLink='" + courseLink + '\'' +
                     ", rlLinks=" + rlLinks +
+                    ", citations=" + citations +
                     '}';
         }
     }
