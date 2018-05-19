@@ -8,14 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.bdero.bulibraryreserves.CourseResponse.Course;
-import com.example.bdero.bulibraryreserves.CourseResponse.Instructor;
+import com.example.bdero.bulibraryreserves.async.CourseResponse.Course;
+import com.example.bdero.bulibraryreserves.async.CourseResponse.Instructor;
+import com.example.bdero.bulibraryreserves.async.CitationsAsyncTask;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -46,16 +45,16 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         mCourseCodes = new ArrayList<>(mDataSet.keySet());
     }
 
-    ArrayList<String> getCourseCodes(){
+    public ArrayList<String> getCourseCodes(){
         return mCourseCodes;
     }
 
-    void addNewCourse(String code) {
+    public void addNewCourse(String code) {
         mDataSet.put(code, new ArrayList<Course>());
         mCourseCodes.add(code);
     }
 
-    protected void addCourseInfo(String code, Course course) {
+    public void addCourseInfo(String code, Course course) {
         mDataSet.get(code).add(course);
     }
 

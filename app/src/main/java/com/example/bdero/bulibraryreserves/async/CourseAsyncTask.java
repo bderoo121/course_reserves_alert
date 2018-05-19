@@ -1,11 +1,13 @@
-package com.example.bdero.bulibraryreserves;
+package com.example.bdero.bulibraryreserves.async;
 
 import android.nfc.FormatException;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.bdero.bulibraryreserves.CourseResponse.Course;
-import com.example.bdero.bulibraryreserves.RLResponse.ReadingList;
+import com.example.bdero.bulibraryreserves.CourseListActivity;
+import com.example.bdero.bulibraryreserves.CourseListAdapter;
+import com.example.bdero.bulibraryreserves.async.CourseResponse.Course;
+import com.example.bdero.bulibraryreserves.async.RLResponse.ReadingList;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 import com.google.gson.Gson;
 
@@ -28,7 +30,7 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
 
     private static final String COURSE_TASK_LOG_TAG = CourseAsyncTask.class.getSimpleName();
 
-    CourseAsyncTask(CourseListActivity courseListActivity) {
+    public CourseAsyncTask(CourseListActivity courseListActivity) {
         mCourseListActivity = courseListActivity;
     }
 
@@ -86,7 +88,7 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
     protected void onProgressUpdate(Course... courseValues) {
         super.onProgressUpdate(courseValues);
         for (Course courseItem : courseValues){
-            CourseListAdapter adapter = mCourseListActivity.mAdapter;
+            CourseListAdapter adapter = mCourseListActivity.getAdapter();
             String code = courseItem.getCode();
 
             if (!adapter.getCourseCodes().contains(code)){

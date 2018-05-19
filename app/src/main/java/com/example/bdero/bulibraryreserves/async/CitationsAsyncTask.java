@@ -1,13 +1,11 @@
-package com.example.bdero.bulibraryreserves;
+package com.example.bdero.bulibraryreserves.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 
 import com.example.bdero.bulibraryreserves.CourseListAdapter.CourseHolder;
-import com.example.bdero.bulibraryreserves.CourseResponse.Course;
+import com.example.bdero.bulibraryreserves.async.CourseResponse.Course;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 import com.google.gson.Gson;
 
@@ -23,7 +21,7 @@ public class CitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,ArrayLi
     private final CourseHolder mCourseHolder;
 
 
-    CitationsAsyncTask(Context context, CourseListAdapter.CourseHolder holder){
+    public CitationsAsyncTask(Context context, CourseHolder holder){
         mCourseHolder = holder;
         mContext = context;
     }
@@ -99,8 +97,8 @@ public class CitationsAsyncTask extends AsyncTask<ArrayList<Course>,Void,ArrayLi
     protected void onPostExecute(ArrayList<String> strings) {
         super.onPostExecute(strings);
 
-        mCourseHolder.mCitationsListView.setAdapter(new ArrayAdapter<String>(mCourseHolder.mContext, R.layout.tracked_book_list_item));
+        //mCourseHolder.mCitationsRecyclerView.setAdapter(new ArrayAdapter<String>(mCourseHolder.mContext, R.layout.tracked_book_list_item));
 
-        mCourseHolder.mCitationsProgBar.setVisibility(View.GONE);
+        //mCourseHolder.mCitationsProgBar.setVisibility(View.GONE);
     }
 }

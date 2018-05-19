@@ -13,6 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bdero.bulibraryreserves.async.CitationsAsyncTask;
+import com.example.bdero.bulibraryreserves.async.CourseAsyncTask;
 import com.example.bdero.bulibraryreserves.utils.NetworkUtils;
 
 import java.net.URL;
@@ -24,13 +26,13 @@ public class CourseListActivity extends AppCompatActivity {
     //TODO: Fix course list display error at bottom of screen.
 
     //States to indicate which views to display in the activity.
-    static final int PRE_SEARCH = 0, DURING_SEARCH = 1, POST_SEARCH = 2, ERR_SEARCH = 3;
+    public static final int PRE_SEARCH = 0, DURING_SEARCH = 1, POST_SEARCH = 2, ERR_SEARCH = 3;
 
     private EditText mSearchBar;
     private TextView mInfoText;
     private ProgressBar mProgressBar;
     RecyclerView mCourseRecyclerView;
-    CourseListAdapter mAdapter;
+    private CourseListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
 
@@ -79,7 +81,7 @@ public class CourseListActivity extends AppCompatActivity {
         updateViewVisibility(PRE_SEARCH);
     }
 
-    void updateViewVisibility(int searchStatus) {
+    public void updateViewVisibility(int searchStatus) {
         switch (searchStatus) {
             case PRE_SEARCH:
                 mProgressBar.setVisibility(View.INVISIBLE);
@@ -115,6 +117,10 @@ public class CourseListActivity extends AppCompatActivity {
             default:
                 throw new IllegalArgumentException("Unknown value: search status - " + searchStatus);
         }
+    }
+
+    public CourseListAdapter getAdapter() {
+        return mAdapter;
     }
 
 
