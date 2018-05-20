@@ -94,7 +94,7 @@ public class CitationResponse {
         }
     }
 
-    private class Status{
+    public class Status{
         private String value;
 
         public String getValue() {
@@ -111,7 +111,7 @@ public class CitationResponse {
         }
     }
 
-    private class CopyrightStatus{
+    public class CopyrightStatus{
         private String value;
 
         public String getValue() {
@@ -128,7 +128,7 @@ public class CitationResponse {
         }
     }
 
-    private class MaterialType{
+    public class MaterialType{
         String value;
 
         public String getValue() {
@@ -145,7 +145,7 @@ public class CitationResponse {
         }
     }
 
-    private class Metadata{
+    public class Metadata{
         String title;
         String author;
         long mms_id;

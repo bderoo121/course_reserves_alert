@@ -1,18 +1,12 @@
 package com.example.bdero.bulibraryreserves;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.LayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.example.bdero.bulibraryreserves.async.CitationsAsyncTask;
+import com.example.bdero.bulibraryreserves.async.CitationResponse.Citation;
 import com.example.bdero.bulibraryreserves.async.CourseResponse.Course;
 import com.example.bdero.bulibraryreserves.async.CourseResponse.Instructor;
 
@@ -23,15 +17,16 @@ import java.util.LinkedHashMap;
  * Created by bdero on 3/19/2018.
  */
 
-public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseHolder> {
+public class CourseListAdapter extends RecyclerView.Adapter<CourseHolder> {
 
     private static final String LOG_TAG = CourseListAdapter.class.getSimpleName();
 
-    public LinkedHashMap<String, ArrayList<Course>> mDataSet;
-
-    //Will hold the course titles. Important for relating adapter position to the data.
-    private ArrayList<String> mCourseCodes;
     private Context mContext;
+
+    // The ArrayList is for indexed structure, the hashmap because multiple courses
+    // can have the same course code.
+    public LinkedHashMap<String, ArrayList<Course>> mDataSet;
+    private ArrayList<String> mCourseCodes;
 
     CourseListAdapter(Context context) {
         mDataSet = new LinkedHashMap<>();
@@ -58,7 +53,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(classLayout, parent, shouldAttachImmediately);
 
-        return new CourseHolder(v);
+        return new CourseHolder(v, this);
     }
 
     @Override
@@ -88,6 +83,9 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
                 holder.mClassInstructor.setText(firstInstructor);
             }
         }
+        holder.mCitationAdapter.mDataset = getCitations(courseCodeKey);
+        holder.mCitationAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -118,81 +116,17 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         notifyItemRangeRemoved(0, size);
     }
 
-    public static class CourseHolder extends RecyclerView.ViewHolder {
+    public void updateCourseInfo(String code, ArrayList<Course> courses){
+        mDataSet.get(code).clear();
+        mDataSet.get(code).addAll(courses);
+    }
 
-        private static final String HOLDER_LOG_TAG = CourseHolder.class.getSimpleName();
-
-        boolean mAreCitationsExpanded = false;
-        boolean mAreCitationsLoaded = false;
-
-        Context mContext;
-        ArrayList<Course> mCourse;
-
-        View mCourseWrapper;
-        TextView mClassCode;
-        TextView mCourseName;
-        TextView mClassInstructor;
-        ImageButton mExpandCitationsButton;
-
-        View mCitationsWrapper;
-        RecyclerView mCitationsRecyclerView;
-        LayoutManager mLayoutManager; //TODO: Can this be a static variable?
-        CitationAdapter mCitationAdapter;
-        ProgressBar mCitationsProgBar;
-
-        private CourseHolder(View holder) {
-            super(holder);
-
-            mContext = holder.getContext();
-
-            mCourseWrapper = holder.findViewById(R.id.cl_course_wrapper);
-            mClassCode = holder.findViewById(R.id.tv_class_code);
-            mCourseName = holder.findViewById(R.id.tv_class_name);
-            mClassInstructor = holder.findViewById(R.id.tv_class_instructor);
-            mExpandCitationsButton = holder.findViewById(R.id.ib_expand_citation_list);
-
-            mCitationsWrapper = holder.findViewById(R.id.fl_citation_wrapper);
-            mCitationsRecyclerView = holder.findViewById(R.id.rv_citation_list);
-            mLayoutManager = new LinearLayoutManager(mContext);
-            mCitationAdapter = new CitationAdapter();
-            mCitationsProgBar = holder.findViewById(R.id.progbar_citation_search);
-
-            mCitationsRecyclerView.setLayoutManager(mLayoutManager);
-            mCitationsRecyclerView.setAdapter(mCitationAdapter);
-
-            //When the course information wrapper is clicked on, expand the book information.
-            mCourseWrapper.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.v(HOLDER_LOG_TAG, "Course wrapper clicked on.");
-                    toggleCitationView();
-                }
-            });
+    private ArrayList<Citation> getCitations(String courseCode){
+        ArrayList<Course> courses = mDataSet.get(courseCode);
+        ArrayList<Citation> output = new ArrayList<>();
+        for (Course course : courses){
+            output.addAll(course.getCitations());
         }
-
-        private void toggleCitationView() {
-            if (mAreCitationsExpanded) {
-                //Citations visible. Shrink the citation list back.
-                mCitationsWrapper.setVisibility(View.GONE);
-                mAreCitationsExpanded = false;
-
-            } else {
-                // Citations invisible. If first time opening, load data. Expand the citation list.
-                mCitationsWrapper.setVisibility(View.VISIBLE);
-                mAreCitationsExpanded = true;
-                if (!mAreCitationsLoaded) {
-                    //TODO: Initiate the CitationsAsyncTask
-                    Course[] courseArray = mCourse.toArray(new Course[0]);
-                    new CitationsAsyncTask(mContext, this).execute(courseArray);
-                }
-
-            }
-        }
-
-        public void setProgBarVisibility(int toState) {
-            if (toState == View.VISIBLE || toState == View.INVISIBLE || toState == View.GONE) {
-                mCitationsProgBar.setVisibility(toState);
-            }
-        }
+        return output;
     }
 }

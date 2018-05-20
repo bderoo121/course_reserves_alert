@@ -52,6 +52,11 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
                 throw new Exception("No courses match query " + urls[0].toString());
             }
             for (Course course : courseResponse.getCourses()){
+
+                //Initialize the arrays of reading list links & citations not generated in the response objects.
+                course.setRLLinks(new ArrayList<String>());
+                course.setCitations(new ArrayList<CitationResponse.Citation>());
+
                 //Only continue if the course is still active.
                 if (course.getStatus().equals(STATUS_ACTIVE)){
 
@@ -59,8 +64,6 @@ public class CourseAsyncTask extends AsyncTask<URL,Course,Void> {
                     String readingLists = NetworkUtils.getResponseFromHttpUrl(readingListsURL);
                     RLResponse rlResponse = new Gson().fromJson(readingLists, RLResponse.class);
 
-                    //Initialize the array of reading list links
-                    course.setRLLinks(new ArrayList<String>());
 
                     if (rlResponse.getReadingLists() != null) {
                         //TODO: Include/Exclude based on the different Statuses, Visibilities, and PublishingStatuses
