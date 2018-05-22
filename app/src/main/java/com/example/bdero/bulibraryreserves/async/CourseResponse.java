@@ -50,6 +50,7 @@ public class CourseResponse {
         private String courseLink;
         private ArrayList<String> rlLinks;
         private ArrayList<Citation> citations;
+        private boolean citationsLoaded;
 
         public long getId() {
             return id;
@@ -131,6 +132,14 @@ public class CourseResponse {
             citations.addAll(Arrays.asList(values));
         }
 
+        public boolean areCitationsLoaded() {
+            return citationsLoaded;
+        }
+
+        public void setCitationsLoaded(boolean citationsLoaded) {
+            this.citationsLoaded = citationsLoaded;
+        }
+
         @Override
         public String toString() {
             return "Course{" +
@@ -142,6 +151,7 @@ public class CourseResponse {
                     ", courseLink='" + courseLink + '\'' +
                     ", rlLinks=" + rlLinks +
                     ", citations=" + citations +
+                    ", citations loaded=" + citationsLoaded +
                     '}';
         }
     }

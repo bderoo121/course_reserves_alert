@@ -54,6 +54,7 @@ public class CitationsAsyncTask extends AsyncTask<Course,Void,ArrayList<Course>>
                     String citationResponse = NetworkUtils.getResponseFromHttpUrl(citationURL);
                     CitationResponse response = new Gson().fromJson(citationResponse, CitationResponse.class);
                     curCourse.addCitations(response.getCitations());
+                    curCourse.setCitationsLoaded(true);
 
                 } catch (IOException e) {
                     Log.e(CITATION_TASK_LOG_TAG, "IO error.");
@@ -72,13 +73,6 @@ public class CitationsAsyncTask extends AsyncTask<Course,Void,ArrayList<Course>>
         super.onPostExecute(courses);
         CitationAdapter adapter = mCourseHolder.getCitationAdapter();
         mCourseHolder.updateCourses(courses);
-
-
-
-
-
-        //mCourseHolder.mCitationsRecyclerView.setAdapter(new ArrayAdapter<String>(mCourseHolder.mContext, R.layout.tracked_book_list_item));
-
         mCourseHolder.setProgBarVisibility(View.GONE);
     }
 }

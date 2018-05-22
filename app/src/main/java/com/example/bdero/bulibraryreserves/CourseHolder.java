@@ -84,13 +84,22 @@ public class CourseHolder extends RecyclerView.ViewHolder {
             // Citations invisible. If first time opening, load data. Expand the citation list.
             mCitationsWrapper.setVisibility(View.VISIBLE);
             mAreCitationsExpanded = true;
-            if (!mAreCitationsLoaded) {
-                //TODO: Initiate the CitationsAsyncTask
-                Course[] courseArray = mCourse.toArray(new Course[0]);
-                new CitationsAsyncTask(mContext, this).execute(courseArray);
+            Course[] unloadedCourses = getUnloadedCourses(mCourse);
+            if (unloadedCourses.length > 0){
+                new CitationsAsyncTask(mContext, this).execute(unloadedCourses);
             }
 
         }
+    }
+
+    private Course[] getUnloadedCourses(ArrayList<Course> courses) {
+        ArrayList<Course> output = new ArrayList<>();
+        for (Course course : courses){
+            if (!course.areCitationsLoaded()){
+                output.add(course);
+            }
+        }
+        return output.toArray(new Course[0]);
     }
 
     public void setProgBarVisibility(int toState) {

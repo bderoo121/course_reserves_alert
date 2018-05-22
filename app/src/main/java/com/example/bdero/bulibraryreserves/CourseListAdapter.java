@@ -117,8 +117,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseHolder> {
     }
 
     public void updateCourseInfo(String code, ArrayList<Course> courses){
-        mDataSet.get(code).clear();
-        mDataSet.get(code).addAll(courses);
+        mDataSet.put(code, courses);
     }
 
     private ArrayList<Citation> getCitations(String courseCode){
