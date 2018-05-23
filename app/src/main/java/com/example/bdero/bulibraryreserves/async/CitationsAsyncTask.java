@@ -31,6 +31,7 @@ public class CitationsAsyncTask extends AsyncTask<Course,Void,ArrayList<Course>>
 
     @Override
     protected void onPreExecute() {
+        mCourseHolder.setAreCitationsExpanded(true);
         super.onPreExecute();
     }
 
@@ -71,8 +72,7 @@ public class CitationsAsyncTask extends AsyncTask<Course,Void,ArrayList<Course>>
     @Override
     protected void onPostExecute(ArrayList<Course> courses) {
         super.onPostExecute(courses);
-        CitationAdapter adapter = mCourseHolder.getCitationAdapter();
         mCourseHolder.updateCourses(courses);
-        mCourseHolder.setProgBarVisibility(View.GONE);
+        mCourseHolder.setProgBarVisibility(View.INVISIBLE);
     }
 }

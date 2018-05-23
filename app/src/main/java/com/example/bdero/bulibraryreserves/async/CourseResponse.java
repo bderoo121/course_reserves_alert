@@ -14,6 +14,8 @@ public class CourseResponse {
     @SerializedName("total_record_count")
     private int count;
 
+    private boolean isExpanded;
+
     public Course[] getCourses() {
         return courses;
     }
@@ -30,11 +32,20 @@ public class CourseResponse {
         this.count = count;
     }
 
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        isExpanded = expanded;
+    }
+
     @Override
     public String toString() {
         return "CourseResponse{" +
-                "courses=" + Arrays.toString(courses) +
-                ", record_count=" + count +
+                " record_count=" + count +
+                ", is_expanded=" + isExpanded +
+                ", courses=" + Arrays.toString(courses) +
                 '}';
     }
 

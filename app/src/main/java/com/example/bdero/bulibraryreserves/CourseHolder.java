@@ -92,7 +92,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private Course[] getUnloadedCourses(ArrayList<Course> courses) {
+    public Course[] getUnloadedCourses(ArrayList<Course> courses) {
         ArrayList<Course> output = new ArrayList<>();
         for (Course course : courses){
             if (!course.areCitationsLoaded()){
@@ -108,14 +108,12 @@ public class CourseHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public CitationAdapter getCitationAdapter() {
-        return mCitationAdapter;
+    public void setAreCitationsExpanded(boolean value) {
+        mAreCitationsExpanded = value;
     }
 
-
     public void updateCourses(ArrayList<Course> courses) {
-        mCourse.clear();
-        mCourse.addAll(courses);
+        mCourse = courses;
         String courseCode = courses.get(0).getCode();
         mParent.mDataSet.put(courseCode,courses);
         int courseIndex = mParent.getCourseCodes().indexOf(courseCode);

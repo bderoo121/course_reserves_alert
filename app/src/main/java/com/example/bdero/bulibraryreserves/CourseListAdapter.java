@@ -62,27 +62,43 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseHolder> {
         String courseCodeKey = mCourseCodes.get(position);
         holder.mClassCode.setText(courseCodeKey);
 
-        // Use the course code as a key to fetch all relevant course objects
+        // Display the course's code.
         holder.mCourse = mDataSet.get(courseCodeKey);
 
-        // Use the title listed for the first object under the course
+        // Display the course's name.
         // TODO: Implement a better way to handle multiple/missing course titles.
         String courseName = holder.mCourse.get(0).getName();
         holder.mCourseName.setText(courseName);
 
+        // Display the course's instructor(s).
         // TODO: Implement a better way to handle multiple/missing course instructors.
         Instructor[] courseInstructors = holder.mCourse.get(0).getInstructors();
         if (courseInstructors.length > 0) {
 
-            // CourseInstructor array object: [prim_identifier, first_name, last_name]
+            // Object in CourseInstructor array: [prim_identifier, first_name, last_name]
             String firstInstructor = "Prof. " + courseInstructors[0].getLast_name();
-
             if (courseInstructors.length > 1) {
                 holder.mClassInstructor.setText(firstInstructor + ", ...");
             } else {
                 holder.mClassInstructor.setText(firstInstructor);
             }
         }
+        // If citations were previously expanded, reveal the citations wrapper.
+        // TODO: If citations were previously expanded, set the button image to the expanded version.
+        if (holder.mAreCitationsExpanded) {
+            holder.mCitationsWrapper.setVisibility(View.VISIBLE);
+        } else {
+            holder.mCitationsWrapper.setVisibility(View.GONE);
+        }
+
+        // If citations were finished loading, hide the progress bar.
+        if (holder.getUnloadedCourses(holder.mCourse).length == 0){
+            holder.mCitationsProgBar.setVisibility(View.GONE);
+        } else {
+            holder.mCitationsProgBar.setVisibility(View.VISIBLE);
+        }
+
+        // Pass the course data to the citation adapter to display.
         holder.mCitationAdapter.mDataset = getCitations(courseCodeKey);
         holder.mCitationAdapter.notifyDataSetChanged();
 
